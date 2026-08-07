@@ -1,0 +1,127 @@
+.section {
+  padding: clamp(64px, 9vw, 120px) var(--gutter) clamp(72px, 9vw, 120px);
+}
+
+.wrap {
+  max-width: var(--content);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 24px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: ccFadeUp 0.6s var(--ease) both;
+}
+
+.h1 {
+  margin: 0 0 64px;
+  font: 700 clamp(34px, 5vw, 56px) / 1.1 var(--font-heading);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  animation: ccFadeUp 0.6s var(--ease) both;
+  animation-delay: 0.1s;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 64px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: ccFadeUp 0.6s var(--ease) both;
+  animation-delay: 0.2s;
+}
+
+.detailLabel {
+  margin: 0 0 8px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.detailLink {
+  font: 500 17px/1.4 var(--font-body);
+  color: var(--navy);
+  text-decoration: none;
+  background: linear-gradient(var(--navy), var(--navy)) no-repeat left bottom / 0% 1px;
+  padding-bottom: 3px;
+  transition: background-size 0.2s ease;
+}
+
+.detailLink:hover {
+  background-size: 100% 1px;
+}
+
+.detailValue {
+  margin: 0;
+  font: 500 17px/1.4 var(--font-body);
+  color: var(--ink);
+}
+
+.pitchNote {
+  border-top: 1px solid var(--rule);
+  padding-top: 28px;
+  margin-top: 8px;
+}
+
+.pitchLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 15px/1.5 var(--font-body);
+  color: var(--navy);
+  text-decoration: none;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.pitchLink:hover {
+  gap: 10px;
+  color: var(--tide);
+}
+
+.formColumn {
+  animation: ccFadeUp 0.6s var(--ease) both;
+  animation-delay: 0.3s;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.submit {
+  align-self: flex-start;
+}
+
+.sentCard {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 40px 32px;
+}
+
+.sentTitle {
+  margin: 0 0 10px;
+  font: 700 24px/1.2 var(--font-heading);
+  color: var(--ink);
+}
+
+.sentBody {
+  margin: 0;
+  font: 400 15px/1.65 var(--font-body);
+  color: var(--muted);
+}
+
+.sendError {
+  margin: 0;
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--error);
+}

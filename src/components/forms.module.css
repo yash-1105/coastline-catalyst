@@ -1,0 +1,111 @@
+/* Shared field styling for the founder application and the contact form. */
+
+.label {
+  display: block;
+  font: 500 13px/1 var(--font-body);
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font: 400 15px/1.4 var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.select {
+  appearance: auto;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--navy);
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.error {
+  margin: 6px 0 0;
+  font: 400 13px/1.4 var(--font-body);
+  color: var(--error);
+}
+
+.field {
+  min-width: 0;
+}
+
+.fieldHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.fieldHead .label {
+  margin-bottom: 0;
+}
+
+.counter {
+  font: 400 12.5px/1 var(--font-body);
+  color: var(--muted);
+  font-feature-settings: 'tnum';
+}
+
+.pillButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 15px/1 var(--font-body);
+  color: var(--paper);
+  background: var(--navy);
+  border: none;
+  border-radius: 999px;
+  padding: 15px 28px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.pillButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+  background: var(--tide);
+}
+
+.pillButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* reCAPTCHA slot */
+.captcha {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font: 400 13px/1.5 var(--font-body);
+  color: var(--muted);
+  max-width: 320px;
+}
+
+.captchaLive {
+  min-height: 78px;
+}

@@ -1,0 +1,417 @@
+/* ---------- shared section furniture ---------- */
+
+.eyebrow {
+  margin: 0;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.index {
+  font: 500 14px/1 var(--font-body);
+  color: var(--muted);
+  font-feature-settings: 'tnum';
+}
+
+.h2 {
+  margin: 0;
+  font: 700 clamp(28px, 3.6vw, 40px) / 1.12 var(--font-heading);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.stickyCol {
+  position: sticky;
+  top: var(--sticky-top);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-self: start;
+}
+
+/* Below 728px `repeat(auto-fit, minmax(300px, 1fr))` collapses to a single
+   column, and a sticky heading would then sit on top of the rows scrolling
+   past it. Pinning only makes sense while the two columns are side by side. */
+@media (max-width: 727px) {
+  .stickyCol {
+    position: static;
+  }
+}
+
+.itemTitle {
+  margin: 0 0 10px;
+  font: 700 20px/1.2 var(--font-heading);
+  color: var(--ink);
+}
+
+.itemBody {
+  margin: 0;
+  font: 400 15.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+/* ---------- 01 / 07  Who we are ---------- */
+
+.who {
+  padding: 96px var(--gutter);
+}
+
+.whoWrap {
+  max-width: var(--content);
+  margin: 0 auto;
+  position: relative;
+}
+
+.whoIndex {
+  composes: index;
+  position: absolute;
+  top: 4px;
+  right: 0;
+}
+
+.whoInner {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.whoEyebrow {
+  composes: eyebrow;
+  margin-bottom: 32px;
+}
+
+.whoText {
+  margin: 0;
+  font: 500 clamp(25px, 3.4vw, 38px) / 1.5 var(--font-heading);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* Every word starts Rule grey and fills to Ink as the paragraph
+   reaches the middle of the viewport. */
+.whoText span {
+  color: var(--ink);
+}
+
+:global(html.js) .whoText span {
+  color: var(--rule);
+  transition: color 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html.js) .whoText span {
+    color: var(--ink);
+    transition: none;
+  }
+}
+
+/* ---------- 02 / 07  What we believe ---------- */
+
+.believe {
+  padding: 96px var(--gutter) 160px;
+  border-top: 1px solid var(--hairline);
+}
+
+.believeGrid {
+  max-width: var(--content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: clamp(130px, 17vw, 220px) 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.believeSticky {
+  position: sticky;
+  top: var(--sticky-top);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: start;
+}
+
+.believeEyebrow {
+  composes: eyebrow;
+  line-height: 1.5;
+}
+
+.believeTrack {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.believeItem {
+  flex: 1 0 min(280px, 74vw);
+  scroll-snap-align: start;
+  padding: 0 32px 8px;
+  border-left: 1px solid var(--hairline);
+}
+
+.believeItem:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.believeTitle {
+  margin: 20px 0 6px;
+  font: 700 20px/1.2 var(--font-heading);
+  color: var(--ink);
+}
+
+.believeBody {
+  margin: 0;
+  font: 400 15.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 32ch;
+}
+
+@media (max-width: 700px) {
+  .believeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .believeSticky {
+    position: static;
+  }
+}
+
+/* ---------- 03 / 07  Investment focus (full-bleed navy band) ---------- */
+
+.focus {
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+}
+
+/* The band stays Deep Navy and the footage reads through it as light traces
+   rather than washing the whole band grey. Blend mode chosen by comparison,
+   see the note in README. */
+.focusMedia {
+  opacity: 0.3;
+  mix-blend-mode: screen;
+}
+
+.focusInner {
+  position: relative;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: clamp(96px, 11vw, 140px) var(--gutter);
+}
+
+.focusHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.focusEyebrow {
+  composes: eyebrow;
+  color: var(--paper-70);
+}
+
+.focusIndex {
+  composes: index;
+  color: var(--paper-40);
+}
+
+.focusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0 40px;
+}
+
+.focusItem {
+  padding: 0 0 24px;
+}
+
+.focusLine {
+  height: 1px;
+  background: var(--paper-20);
+  transform-origin: left;
+}
+
+.focusLabel {
+  margin: 24px 0 12px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-55);
+}
+
+.focusValueMask {
+  overflow: hidden;
+}
+
+.focusValue {
+  margin: 0;
+  font: 700 clamp(22px, 2.4vw, 30px) / 1.25 var(--font-heading);
+  color: var(--paper);
+}
+
+/* ---------- 04 / 07  What we look for ---------- */
+
+.lookFor {
+  padding: 96px var(--gutter);
+}
+
+.splitGrid {
+  max-width: var(--content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 48px 80px;
+  align-items: start;
+}
+
+.lookForList {
+  display: grid;
+  gap: 44px;
+}
+
+.lookForItem {
+  border-top: 1px solid var(--hairline);
+  padding-top: 24px;
+}
+
+.headline16 {
+  composes: h2;
+  max-width: 16ch;
+}
+
+/* ---------- 06 / 07  Why founders partner with us ---------- */
+
+.why {
+  padding: 96px var(--gutter) 160px;
+  border-top: 1px solid var(--hairline);
+}
+
+.headline14 {
+  composes: h2;
+  max-width: 14ch;
+}
+
+.whyRow {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  padding: 28px 0;
+}
+
+.whyNum {
+  flex: 0 0 48px;
+  font: 500 13px/2 var(--font-body);
+  letter-spacing: 0.08em;
+  color: var(--rule);
+  font-feature-settings: 'tnum';
+}
+
+.whyBody {
+  flex: 1 1 320px;
+}
+
+.whyTitle {
+  margin: 0 0 8px;
+  font: 700 19px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+
+.whyText {
+  margin: 0;
+  font: 400 15.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 56ch;
+}
+
+.whyLine {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--navy);
+  opacity: 0.3;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Reduced motion and no-JS: the rows sit at their final state. */
+@media (prefers-reduced-motion: reduce) {
+  .whyNum {
+    color: var(--navy);
+  }
+
+  .whyLine {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- scroll spine (>=1200px only) ---------- */
+
+.spine {
+  position: fixed;
+  left: 28px;
+  top: 96px;
+  bottom: 32px;
+  width: 1px;
+  background: var(--hairline);
+  z-index: 50;
+  transition: background 300ms ease;
+}
+
+.spineFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 0;
+  background: var(--navy);
+  transition: background 300ms ease;
+}
+
+.spineDot {
+  position: absolute;
+  left: -2.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--navy);
+  transition: transform 0.3s ease, background 0.3s ease, border-color 300ms ease;
+}
+
+.spineDot[data-active='true'] {
+  transform: scale(1.6);
+  background: var(--navy);
+}
+
+/* Over the hero video the spine inverts along with the header. */
+:global(html[data-hero-video='true']) .spine {
+  background: rgba(251, 251, 249, 0.45);
+}
+
+:global(html[data-hero-video='true']) .spineFill {
+  background: var(--paper);
+}
+
+:global(html[data-hero-video='true']) .spineDot {
+  background: transparent;
+  border-color: rgba(251, 251, 249, 0.45);
+}
+
+:global(html[data-hero-video='true']) .spineDot[data-active='true'] {
+  background: var(--paper);
+  border-color: var(--paper);
+}
+
+@media (max-width: 1199px) {
+  .spine {
+    display: none;
+  }
+}

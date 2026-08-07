@@ -1,0 +1,299 @@
+/* ------------------------------------------------------------------
+   Coastline Catalyst — design tokens and global base
+   Palette is closed: no colours outside this list, no gradients over
+   large areas, no dark mode, no italics anywhere.
+------------------------------------------------------------------ */
+
+:root {
+  --paper: #fbfbf9;
+  --ink: #0c1116;
+  --navy: #0f3350;
+  --tide: #2a6e96;
+  --rule: #e4e4e0;
+  --muted: #6b7280;
+  --error: #a5453c;
+
+  /* 12% navy: the hairline used across Home */
+  --hairline: rgba(15, 51, 80, 0.12);
+  --hairline-strong: rgba(15, 51, 80, 0.18);
+  --navy-tint: rgba(15, 51, 80, 0.05);
+
+  --paper-70: rgba(251, 251, 249, 0.7);
+  --paper-60: rgba(251, 251, 249, 0.6);
+  --paper-55: rgba(251, 251, 249, 0.55);
+  --paper-40: rgba(251, 251, 249, 0.4);
+  --paper-20: rgba(251, 251, 249, 0.2);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow: 0 1px 2px rgba(12, 17, 22, 0.04), 0 8px 24px rgba(12, 17, 22, 0.06);
+
+  --content: 1200px;
+  --gutter: 24px;
+  --header-h: 72px;
+  /* header height + 32px breathing room; also the anchor scroll offset */
+  --sticky-top: 104px;
+
+  --font-heading: var(--font-manrope), 'Manrope', system-ui, sans-serif;
+  --font-body: var(--font-inter), 'Inter', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* No italics anywhere. Ever. */
+i,
+em,
+address,
+cite,
+dfn,
+var {
+  font-style: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--navy);
+}
+
+a:hover {
+  color: var(--tide);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(42, 110, 150, 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+/* Hidden scrollbars on the horizontal snap tracks */
+.cc-noscrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cc-noscrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.cc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cc-skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 300;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--paper);
+  font: 500 14px/1 var(--font-body);
+  text-decoration: none;
+  transition: top 0.2s var(--ease);
+}
+
+.cc-skip-link:focus-visible {
+  top: 16px;
+  color: var(--paper);
+}
+
+/* ------------------------------------------------------------------
+   Shared keyframes
+------------------------------------------------------------------ */
+
+@keyframes ccMask {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes ccDraw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ccFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ccSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Seamless: the SVG is 200% wide, so -50% lands on an identical crest. */
+@keyframes ccWave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ccCue {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(34px);
+    opacity: 0;
+  }
+}
+
+@keyframes ccPanel {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes ccStagger {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Route change: a navy panel wipes up from the bottom and away. */
+@keyframes ccWipe {
+  0% {
+    transform: translateY(100%);
+  }
+  45%,
+  55% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reveal on scroll. The `.js` class is set by an inline script before
+   first paint, so a no-JS visitor never gets stuck on hidden content.
+   Every reveal fires once and is never re-triggered.
+------------------------------------------------------------------ */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  will-change: opacity, transform;
+}
+
+.js [data-reveal][data-revealed='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: no parallax, wave drift, pinning, word-fill or
+   spine. Content sits at its final state, opacity only.
+------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* The 404 page is deliberately bare: headline, horizon line, one link. */
+body:has([data-page='404']) [data-site-footer] {
+  display: none;
+}

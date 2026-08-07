@@ -1,0 +1,60 @@
+/* Scroll-scrubbed video. Progress is published as --p on .root and every
+   child animation reads it in CSS, so scrolling never re-renders React. */
+
+.root {
+  position: relative;
+  --p: 0;
+}
+
+/* ---- pinned ---- */
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---- inline: the media sits behind whatever the section already has ---- */
+
+.inlineContent {
+  position: relative;
+}
+
+/* Poster and video share this layer, so a consumer sets opacity or a blend
+   mode once and it applies identically whichever of the two is showing.
+   Blending against the band's own colour needs the layer to stay inside the
+   section's stacking context, so no z-index here. */
+.mediaLayer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---- media layers ---- */
+
+.media,
+.poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The poster sits underneath permanently. It paints first, carries the LCP,
+   and means a slow or failed video never shows a black rectangle. */
+.poster {
+  z-index: 0;
+}
+
+.media {
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}

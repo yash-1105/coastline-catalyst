@@ -1,0 +1,242 @@
+/* Pinned horizontal scroll on desktop, plain swipe carousel below 900px,
+   plain grid under reduced motion. */
+
+.section[data-mode='pin'] {
+  height: 250vh;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 96px 0;
+}
+
+.section[data-mode='pin'] .inner {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+}
+
+.head {
+  max-width: var(--content);
+  margin: 0 auto 48px;
+  width: 100%;
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.eyebrow {
+  margin: 0 0 16px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.h2 {
+  margin: 0;
+  font: 700 clamp(28px, 3.6vw, 40px) / 1.12 var(--font-heading);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.headRight {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 15px/1 var(--font-body);
+  color: var(--navy);
+  text-decoration: none;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.viewAll:hover {
+  gap: 10px;
+  color: var(--tide);
+}
+
+.index {
+  font: 500 14px/1 var(--font-body);
+  color: var(--muted);
+  font-feature-settings: 'tnum';
+}
+
+/* Track left padding aligns to the 1200px content edge and bleeds right.
+   Measured off the container rather than 100vw, which would include the
+   scrollbar and push the first card off the heading's edge. */
+.track {
+  display: flex;
+  gap: 24px;
+  flex-wrap: nowrap;
+  padding: 8px var(--gutter) 8px
+    max(var(--gutter), calc((100% - var(--content)) / 2 + var(--gutter)));
+  will-change: transform;
+}
+
+.section[data-mode='swipe'] .track {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.section[data-mode='grid'] .track {
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 0 0 min(400px, 84vw);
+  scroll-snap-align: start;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 8px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--paper);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section[data-mode='grid'] .card {
+  flex: 1 1 300px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.tile {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 20px/1 var(--font-heading);
+  color: var(--navy);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.card:hover .tile {
+  background: var(--navy);
+  color: var(--paper);
+}
+
+/* A real mark keeps its own colours, so the navy fill would bury it. */
+.tile[data-has-logo='true'] {
+  padding: 10px;
+}
+
+.card:hover .tile[data-has-logo='true'] {
+  background: transparent;
+  border-color: var(--navy);
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.name {
+  margin: 8px 0 0;
+  font: 700 22px/1.2 var(--font-heading);
+  color: var(--ink);
+}
+
+.desc {
+  margin: 0;
+  font: 400 13px/1.6 var(--font-body);
+  color: var(--muted);
+}
+
+.founders {
+  margin: 0;
+  font: 400 13px/1.55 var(--font-body);
+  color: var(--muted);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.pill {
+  font: 500 12px/1 var(--font-body);
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 13px/1 var(--font-body);
+  color: var(--ink);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--navy);
+}
+
+.cardLink {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 14px/1 var(--font-body);
+  color: var(--navy);
+  text-decoration: none;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.cardLink:hover {
+  gap: 10px;
+  color: var(--tide);
+}
+
+.progressWrap {
+  max-width: var(--content);
+  margin: 36px auto 0;
+  width: 100%;
+  padding: 0 var(--gutter);
+}
+
+.section[data-mode='grid'] .progressWrap {
+  display: none;
+}
+
+.progressTrack {
+  height: 1px;
+  background: var(--hairline);
+  position: relative;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  width: 0;
+  background: var(--navy);
+}

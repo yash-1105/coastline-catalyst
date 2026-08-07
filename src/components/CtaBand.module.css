@@ -1,0 +1,88 @@
+.band {
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+}
+
+/* Plain opacity, no blend mode: this clip is already very dark navy, close
+   to the band's own colour, so screen or overlay would only muddy it. */
+.media {
+  opacity: 0.45;
+}
+
+.videoScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 51, 80, 0.35);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: clamp(80px, 10vw, 128px) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.heading {
+  margin: 0;
+  font: 700 clamp(34px, 5vw, 56px) / 1.1 var(--font-heading);
+  letter-spacing: -0.015em;
+  color: var(--paper);
+}
+
+.body {
+  margin: 0;
+  font: 400 16.5px/1.65 var(--font-body);
+  color: rgba(251, 251, 249, 0.75);
+  max-width: 520px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  font: 500 15px/1 var(--font-body);
+  color: var(--navy);
+  background: var(--paper);
+  border-radius: 999px;
+  padding: 15px 28px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  color: var(--navy);
+}
+
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  font: 500 15px/1 var(--font-body);
+  color: var(--paper);
+  background: none;
+  border: 1px solid var(--paper-60);
+  border-radius: 999px;
+  padding: 14px 27px;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.ghost:hover {
+  transform: translateY(-1px);
+  border-color: var(--paper);
+  background: rgba(251, 251, 249, 0.08);
+  color: var(--paper);
+}

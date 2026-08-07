@@ -1,0 +1,16 @@
+/* Navy panel wipes up from the bottom and away on route change. */
+.wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  background: var(--navy);
+  pointer-events: none;
+  transform: translateY(100%);
+  animation: ccWipe 500ms var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wipe {
+    display: none;
+  }
+}

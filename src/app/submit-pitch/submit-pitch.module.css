@@ -1,0 +1,274 @@
+.hero {
+  padding: clamp(64px, 9vw, 120px) var(--gutter) clamp(40px, 5vw, 64px);
+}
+
+.wrap {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 24px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: ccFadeUp 0.6s var(--ease) both;
+}
+
+.h1 {
+  margin: 0;
+  font: 700 clamp(34px, 5vw, 56px) / 1.1 var(--font-heading);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  animation: ccFadeUp 0.6s var(--ease) both;
+  animation-delay: 0.1s;
+}
+
+.sub {
+  margin: 20px 0 0;
+  font: 400 16.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 52ch;
+  animation: ccFadeUp 0.6s var(--ease) both;
+  animation-delay: 0.2s;
+}
+
+.body {
+  padding: 0 var(--gutter) clamp(72px, 9vw, 120px);
+}
+
+/* ---- Step labels and progress ---- */
+
+.stepRow {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.stepButton {
+  background: none;
+  border: none;
+  padding: 0 0 12px;
+  font: 500 13px/1 var(--font-body);
+  color: var(--muted);
+  cursor: default;
+  transition: color 0.2s ease;
+}
+
+.stepButton[data-active='true'] {
+  color: var(--navy);
+}
+
+.stepButton[data-clickable='true'] {
+  cursor: pointer;
+}
+
+.progressTrack {
+  position: relative;
+  height: 1px;
+  background: var(--rule);
+  margin-bottom: 44px;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  background: var(--navy);
+  transition: width 0.5s var(--ease);
+}
+
+/* ---- Sliding step panels ---- */
+
+/* Height follows the active step so a short step leaves no dead space.
+   Set from JS; falls back to the natural (tallest) height without it. */
+.viewport {
+  overflow: hidden;
+  transition: height 0.5s var(--ease);
+}
+
+.track {
+  display: flex;
+  align-items: flex-start;
+  transition: transform 0.5s var(--ease);
+}
+
+.panel {
+  flex: 0 0 100%;
+  min-width: 0;
+  visibility: hidden;
+  transition: visibility 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 2px;
+}
+
+.panel[data-active='true'] {
+  visibility: visible;
+}
+
+.pairGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+/* ---- Pitch deck drop zone ---- */
+
+.zoneLabel {
+  display: block;
+  font: 500 13px/1 var(--font-body);
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.zone {
+  border: 1px dashed #c9c9c4;
+  border-radius: 8px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.zone:hover,
+.zone[data-dragging='true'] {
+  border-color: var(--navy);
+  background: rgba(15, 51, 80, 0.03);
+}
+
+.zone[data-invalid='true'] {
+  border-color: var(--error);
+}
+
+.zoneTitle {
+  margin: 0 0 6px;
+  font: 500 15px/1.4 var(--font-body);
+  color: var(--ink);
+}
+
+.zoneHint {
+  margin: 0;
+  font: 400 13px/1.4 var(--font-body);
+  color: var(--muted);
+}
+
+.fileRow {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fileMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.fileName {
+  margin: 0;
+  font: 500 14px/1.4 var(--font-body);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileSize {
+  margin: 0;
+  font: 400 12.5px/1.4 var(--font-body);
+  color: var(--muted);
+}
+
+.fileRemove {
+  font: 500 13px/1 var(--font-body);
+  color: var(--navy);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.fileRemove:hover {
+  border-color: var(--navy);
+}
+
+/* ---- Consent ---- */
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.consent input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--navy);
+  flex: none;
+}
+
+.consentText {
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--ink);
+}
+
+.consentText a {
+  color: var(--navy);
+  text-decoration: underline;
+}
+
+.consentError {
+  margin: -12px 0 0 28px;
+  font: 400 13px/1.4 var(--font-body);
+  color: var(--error);
+}
+
+/* ---- Footer controls ---- */
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.back {
+  font: 500 14px/1 var(--font-body);
+  color: var(--navy);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  visibility: hidden;
+}
+
+.back[data-visible='true'] {
+  visibility: visible;
+}
+
+.back:hover {
+  color: var(--tide);
+}
+
+.submitError {
+  margin: 16px 0 0;
+  font: 400 14px/1.6 var(--font-body);
+  color: var(--error);
+}
