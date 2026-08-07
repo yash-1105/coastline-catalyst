@@ -17,6 +17,8 @@ export default function Logo({
   /** True in the header, where the mark is above the fold on every page. */
   priority?: boolean;
 }) {
+  /* width/height set the intrinsic size and the srcset. Display size is left
+     to CSS so callers can make it responsive. */
   return (
     <Image
       src={logo}
@@ -24,7 +26,7 @@ export default function Logo({
       width={size}
       height={size}
       priority={priority}
-      style={{ display: 'block', width: size, height: size }}
+      style={{ display: 'block' }}
     />
   );
 }

@@ -62,13 +62,19 @@ export default function ScrollVideo({
 
   /* Scrubbing needs a pointer-class device: below 900px iOS Safari does not
      honour programmatic currentTime reliably enough to risk a frozen section.
-     A looping background clip has no such problem, so it only needs motion to
-     be allowed. Both start false so the server renders the poster. */
+     Both start false so the server renders the poster. */
   const [allowMotion, setAllowMotion] = useState(false);
   const [allowScrub, setAllowScrub] = useState(false);
   const [sourceAttached, setSourceAttached] = useState(eager);
 
-  const active = playback === 'loop' ? allowMotion : allowScrub;
+  /* Below 900px a scrub section falls back to looping rather than to a still
+     poster. Muted, playsInline autoplay is well supported on iOS, so the
+     footage still moves on the phones most of this traffic arrives on; it just
+     runs on its own clock instead of following the scroll. Only reduced motion
+     drops to a static poster now. */
+  const scrubbing = playback === 'scrub' && allowScrub;
+  const looping = allowMotion && !scrubbing;
+  const active = scrubbing || looping;
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -140,7 +146,7 @@ export default function ScrollVideo({
 
   // ---- loop playback: play while on screen, pause when it leaves ----
   useEffect(() => {
-    if (playback !== 'loop' || !active) return;
+    if (!looping) return;
     const root = rootRef.current;
     const video = videoRef.current;
     if (!root || !video) return;
@@ -164,11 +170,11 @@ export default function ScrollVideo({
       io.disconnect();
       video.pause();
     };
-  }, [playback, active, sourceAttached]);
+  }, [looping, sourceAttached]);
 
   // ---- scrub playback ----
   useEffect(() => {
-    if (playback !== 'scrub' || !active) return;
+    if (!scrubbing) return;
     const root = rootRef.current;
     const video = videoRef.current;
     if (!root || !video) return;
@@ -251,7 +257,7 @@ export default function ScrollVideo({
       stop();
       video.removeEventListener('loadedmetadata', onMeta);
     };
-  }, [playback, active, mode, sourceAttached]);
+  }, [scrubbing, mode, sourceAttached]);
 
   const media = (
     <div className={`${styles.mediaLayer} ${mediaClassName ?? ''}`} aria-hidden="true">
@@ -277,7 +283,8 @@ export default function ScrollVideo({
           preload={sourceAttached ? 'auto' : 'none'}
           muted
           playsInline
-          loop={playback === 'loop'}
+          loop={looping}
+          autoPlay={looping}
           disablePictureInPicture
           tabIndex={-1}
           aria-hidden="true"
@@ -292,7 +299,7 @@ export default function ScrollVideo({
         ref={rootRef}
         className={`${styles.root} ${className ?? ''}`}
         /* Reduced motion and small screens lose the pin entirely. */
-        style={{ height: active ? pinHeight : '100vh' }}
+        style={{ height: scrubbing ? pinHeight : '100vh' }}
       >
         <div className={styles.sticky}>
           {media}

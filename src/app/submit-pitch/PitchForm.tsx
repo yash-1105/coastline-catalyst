@@ -10,8 +10,9 @@ import {
   type DragEvent,
   type KeyboardEvent,
 } from 'react';
-import Recaptcha from '@/components/Recaptcha';
+import Turnstile, { type TurnstileHandle } from '@/components/Turnstile';
 import { PdfIcon } from '@/components/Icons';
+import { uploadDeck } from '@/lib/supabase-browser';
 import { revenueOptions, stageOptions } from '@/lib/site';
 import form from '@/components/forms.module.css';
 import styles from './submit-pitch.module.css';
@@ -108,7 +109,11 @@ export default function PitchForm() {
   const [submitError, setSubmitError] = useState('');
   const [dragging, setDragging] = useState(false);
   const [captchaToken, setCaptchaToken] = useState('');
+  /** null when idle, 0 to 1 while the deck is uploading. */
+  const [uploadFraction, setUploadFraction] = useState<number | null>(null);
+  const [stageLabel, setStageLabel] = useState('');
   const fileInput = useRef<HTMLInputElement>(null);
+  const turnstile = useRef<TurnstileHandle | null>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const panels = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -235,31 +240,99 @@ export default function PitchForm() {
   const submit = async () => {
     if (submitting || !checkStep(2)) return;
 
+    if (!file) {
+      setErrors((current) => ({
+        ...current,
+        file: 'Attach your pitch deck as a single PDF so we can review it.',
+      }));
+      return;
+    }
+
+    if (!captchaToken) {
+      setSubmitError('Complete the spam check below, then submit.');
+      return;
+    }
+
     setSubmitError('');
     setSubmitting(true);
 
+    /* Three calls, because the deck must never pass through a serverless
+       function: Vercel caps a request body at 4.5MB and decks run to 25MB.
+       1. ask for a signed upload URL   (a few bytes of JSON)
+       2. PUT the file straight to Supabase Storage, with progress
+       3. post the form fields plus the storage path  (a few KB of JSON)
+       On any failure every field and the attached file stay in state, so
+       retrying costs one click and no retyping. */
     try {
-      const payload = new FormData();
-      for (const [key, value] of Object.entries(values)) {
-        payload.append(key, String(value));
+      setStageLabel('Preparing upload');
+      setUploadFraction(null);
+
+      const urlResponse = await fetch('/api/pitch/upload-url', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, sizeBytes: file.size }),
+      });
+
+      const urlPayload = (await urlResponse.json().catch(() => null)) as
+        | { path?: string; token?: string; signedUrl?: string; error?: string }
+        | null;
+
+      if (!urlResponse.ok || !urlPayload?.path || !urlPayload.token || !urlPayload.signedUrl) {
+        throw new Error(urlPayload?.error ?? '');
       }
-      if (file) payload.append('deck', file, file.name);
-      if (captchaToken) payload.append('recaptchaToken', captchaToken);
 
-      const response = await fetch('/api/submit-pitch', { method: 'POST', body: payload });
+      setStageLabel('Uploading your deck');
+      setUploadFraction(0);
+      await uploadDeck(
+        urlPayload.signedUrl,
+        urlPayload.path,
+        urlPayload.token,
+        file,
+        setUploadFraction,
+      );
 
-      if (!response.ok) {
-        const detail = await response.json().catch(() => null);
-        throw new Error(detail?.error ?? 'Submission failed');
+      setStageLabel('Finishing up');
+      setUploadFraction(null);
+
+      const submitResponse = await fetch('/api/pitch/submit', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          companyName: values.company,
+          founderName: values.founder,
+          email: values.email,
+          phone: values.phone,
+          website: values.website,
+          linkedin: values.linkedin,
+          stage: values.stage,
+          revenueBand: values.revenue,
+          industry: values.industry,
+          country: values.country,
+          description: values.desc,
+          whyCoastline: values.why,
+          deckPath: urlPayload.path,
+          deckFilename: file.name,
+          deckSizeBytes: file.size,
+          turnstileToken: captchaToken,
+        }),
+      });
+
+      if (!submitResponse.ok) {
+        const detail = (await submitResponse.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(detail?.error ?? '');
       }
 
       router.push('/thank-you');
     } catch (error) {
       setSubmitting(false);
+      setUploadFraction(null);
+      setStageLabel('');
+      // The token is single use and the server may already have burned it.
+      turnstile.current?.reset();
+      setCaptchaToken('');
       setSubmitError(
-        error instanceof Error && error.message !== 'Submission failed'
-          ? error.message
-          : `Something went wrong sending that. Try again, or email your deck to hello@coastlinecatalyst.com.`,
+        (error instanceof Error && error.message) ||
+          'Something went wrong sending that. Try again, or email your deck to hello@coastlinecatalyst.com.',
       );
     }
   };
@@ -637,7 +710,9 @@ export default function PitchForm() {
                   </p>
                 )}
 
-                <Recaptcha onToken={setCaptchaToken} />
+                {/* Step 3 only: a token expires, so minting it on step 1
+                    would leave it stale by the time anyone submits. */}
+                <Turnstile onToken={setCaptchaToken} handleRef={turnstile} />
               </div>
             </div>
           </div>
@@ -660,13 +735,52 @@ export default function PitchForm() {
               <button
                 type="button"
                 className={form.pillButton}
-                disabled={!allPass || submitting}
+                disabled={!allPass || !captchaToken || submitting}
                 onClick={submit}
               >
                 {submitting ? 'Submitting…' : 'Submit application'}
               </button>
             )}
           </div>
+
+          {/* A 25MB deck on a slow connection can take 30 seconds. The bar
+              carries real byte progress during the upload and falls back to an
+              indeterminate sweep for the two short calls either side, so the
+              page never looks frozen. */}
+          {submitting && (
+            <div className={styles.upload} role="status" aria-live="polite">
+              <div className={styles.uploadHead}>
+                <span>{stageLabel}</span>
+                {uploadFraction !== null && (
+                  <span className={styles.uploadPercent}>
+                    {Math.round(uploadFraction * 100)}%
+                  </span>
+                )}
+              </div>
+              <div
+                className={styles.uploadTrack}
+                data-indeterminate={uploadFraction === null}
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={
+                  uploadFraction === null ? undefined : Math.round(uploadFraction * 100)
+                }
+              >
+                <div
+                  className={styles.uploadFill}
+                  style={
+                    uploadFraction === null
+                      ? undefined
+                      : { width: `${(uploadFraction * 100).toFixed(1)}%` }
+                  }
+                />
+              </div>
+              <p className={styles.uploadHint}>
+                Keep this tab open until it finishes.
+              </p>
+            </div>
+          )}
 
           {submitError && (
             <p role="alert" className={styles.submitError}>

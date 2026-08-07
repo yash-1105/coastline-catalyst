@@ -14,10 +14,15 @@
   border-bottom-color: var(--rule);
 }
 
+/* Full bleed rather than locked to the 1200px content column: on a wide
+   screen that left the whole bar stranded in the middle. Padding scales with
+   the viewport so the lockup and the nav sit near the edges without touching
+   them. */
 .inner {
-  max-width: var(--content);
-  margin: 0 auto;
-  padding: 0 var(--gutter);
+  width: 100%;
+  /* Floor matches --gutter so the lockup still lines up with page content on
+     a phone; it only starts opening out once there is room to spare. */
+  padding: 0 clamp(var(--gutter), 3.5vw, 72px);
   height: var(--header-h);
   display: flex;
   align-items: center;
@@ -28,7 +33,7 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--ink);
   text-decoration: none;
 }
@@ -37,9 +42,29 @@
   color: var(--ink);
 }
 
+/* Sized here rather than inline so it can shrink on a narrow screen.
+   52px in a 72px bar leaves 10px above and below, so the lockup fills the
+   header instead of floating in it. */
+.brand img {
+  width: 52px;
+  height: 52px;
+}
+
 .wordmark {
-  font: 700 17px/1 var(--font-heading);
+  font: 700 20px/1 var(--font-heading);
   letter-spacing: -0.01em;
+}
+
+/* At 320px the full-size lockup plus the hamburger would overflow. */
+@media (max-width: 480px) {
+  .brand img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .wordmark {
+    font-size: 17px;
+  }
 }
 
 .nav {

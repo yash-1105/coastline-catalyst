@@ -60,7 +60,7 @@ export default function SiteHeader() {
       <header ref={headerRef} className={styles.header} data-solid={alwaysSolid}>
         <div className={styles.inner}>
           <Link href="/" aria-label="Coastline Catalyst home" className={styles.brand}>
-            <Logo size={32} priority />
+            <Logo size={52} priority />
             <span className={styles.wordmark}>Coastline Catalyst</span>
           </Link>
 
