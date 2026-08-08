@@ -21,6 +21,7 @@ export default function Hero() {
       <ScrollVideo
         mode="pinned"
         src="/video/hero-coastline.mp4"
+        srcMobile="/video/hero-coastline.mobile.mp4"
         poster="/video/posters/hero-coastline.webp"
         pinHeight="250vh"
         eager

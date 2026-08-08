@@ -68,6 +68,7 @@ export function InvestmentFocus() {
       <ScrollVideo
         mode="inline"
         src="/video/tide-edge.mp4"
+        srcMobile="/video/tide-edge.mobile.mp4"
         poster="/video/posters/tide-edge.webp"
         mediaClassName={styles.focusMedia}
       >

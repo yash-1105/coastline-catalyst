@@ -51,6 +51,7 @@ export default function CtaBand({ video = false }: { video?: boolean }) {
         mode="inline"
         playback="loop"
         src="/video/open-water.mp4"
+        srcMobile="/video/open-water.mobile.mp4"
         poster="/video/posters/open-water.webp"
         mediaClassName={styles.media}
       >

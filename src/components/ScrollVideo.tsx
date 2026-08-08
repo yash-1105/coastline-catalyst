@@ -14,6 +14,13 @@ export type ScrollVideoPlayback =
 
 export interface ScrollVideoProps {
   src: string;
+  /**
+   * Smaller encode served below 900px. Mobile loops rather than scrubs, so it
+   * needs neither the all-keyframe encode nor the full frame size, and those
+   * two facts together cut roughly 90% of the bytes on the connections least
+   * able to afford them. Falls back to `src` when absent.
+   */
+  srcMobile?: string;
   poster: string;
   mode: ScrollVideoMode;
   playback?: ScrollVideoPlayback;
@@ -47,6 +54,7 @@ const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
 
 export default function ScrollVideo({
   src,
+  srcMobile,
   poster,
   mode,
   playback = 'scrub',
@@ -64,7 +72,7 @@ export default function ScrollVideo({
      honour programmatic currentTime reliably enough to risk a frozen section.
      Both start false so the server renders the poster. */
   const [allowMotion, setAllowMotion] = useState(false);
-  const [allowScrub, setAllowScrub] = useState(false);
+  const [isWide, setIsWide] = useState(false);
   const [sourceAttached, setSourceAttached] = useState(eager);
 
   /* Below 900px a scrub section falls back to looping rather than to a still
@@ -72,16 +80,20 @@ export default function ScrollVideo({
      footage still moves on the phones most of this traffic arrives on; it just
      runs on its own clock instead of following the scroll. Only reduced motion
      drops to a static poster now. */
-  const scrubbing = playback === 'scrub' && allowScrub;
+  const scrubbing = playback === 'scrub' && allowMotion && isWide;
   const looping = allowMotion && !scrubbing;
   const active = scrubbing || looping;
+
+  /* Chosen by viewport, not by playback mode: a desktop section that loops
+     still deserves the full-size encode. */
+  const activeSrc = !isWide && srcMobile ? srcMobile : src;
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const wide = window.matchMedia('(min-width: 900px)');
     const sync = () => {
       setAllowMotion(!reduced.matches);
-      setAllowScrub(!reduced.matches && wide.matches);
+      setIsWide(wide.matches);
     };
 
     sync();
@@ -119,7 +131,8 @@ export default function ScrollVideo({
     const video = videoRef.current;
     if (!video) return;
     if (video.readyState === 0 && video.networkState !== 2) video.load();
-  }, [sourceAttached, active]);
+    // activeSrc is a dep: crossing the breakpoint swaps the file.
+  }, [sourceAttached, active, activeSrc]);
 
   // Publish visibility for the page theme, whether or not video is running.
   useEffect(() => {
@@ -275,7 +288,7 @@ export default function ScrollVideo({
         <video
           ref={videoRef}
           className={styles.media}
-          src={sourceAttached ? src : undefined}
+          src={sourceAttached ? activeSrc : undefined}
           poster={poster}
           /* Must become 'auto' the moment a src exists. Left at 'none' the
              browser fetches nothing, metadata never arrives, and the poster
