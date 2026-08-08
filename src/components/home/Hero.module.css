@@ -35,18 +35,24 @@
   height: 100%;
   max-width: var(--content);
   margin: 0 auto;
-  padding: var(--header-h) var(--gutter) 0;
+  padding: var(--header-h) var(--gutter) 40px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   box-sizing: border-box;
 }
 
 /* ---- pin choreography ----
    0.00 - 0.10  copy holds, video scrubs
    0.10 - 0.45  copy fades to 0 and drifts up 80px
-   0.45 - 1.00  video alone */
+   0.45 - 1.00  video alone
+
+   margin-block: auto centres the copy in whatever space the cue leaves,
+   rather than justify-content: center on the parent. The cue is a flow
+   sibling now, so on a short viewport these margins collapse to zero and the
+   cue is pushed below the copy instead of being covered by it. Overlap is
+   structurally impossible rather than tuned away with padding. */
 .head {
+  margin-block: auto;
   --fade: clamp(0, calc((0.45 - var(--p)) / 0.35), 1);
   --drift: clamp(0, calc((var(--p) - 0.1) / 0.35), 1);
   opacity: var(--fade);
@@ -161,14 +167,22 @@
 /* ---- scroll cue: fades permanently on first scroll (HomeScrollFX) ---- */
 
 .cue {
-  position: absolute;
-  left: var(--gutter);
-  bottom: 48px;
+  /* In flow, not absolute. Nothing can be laid out on top of it. */
+  flex: none;
+  margin-top: 40px;
   display: flex;
   align-items: center;
   gap: 14px;
   animation: ccFadeUp 0.6s var(--ease) both;
   animation-delay: 1.8s;
+}
+
+/* On a genuinely short screen the copy needs every pixel, and the hero being
+   exactly one screen tall already says there is more below. */
+@media (max-height: 640px) {
+  .cue {
+    display: none;
+  }
 }
 
 .cueTrack {
