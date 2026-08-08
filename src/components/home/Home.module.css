@@ -16,7 +16,7 @@
 
 .h2 {
   margin: 0;
-  font: 700 clamp(28px, 3.6vw, 40px) / 1.12 var(--font-heading);
+  font: 700 clamp(32px, 3.6vw, 40px) / 1.12 var(--font-heading);
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -41,13 +41,13 @@
 
 .itemTitle {
   margin: 0 0 10px;
-  font: 700 20px/1.2 var(--font-heading);
+  font: 700 22px/1.2 var(--font-heading);
   color: var(--ink);
 }
 
 .itemBody {
   margin: 0;
-  font: 400 15.5px/1.65 var(--font-body);
+  font: 400 16.5px/1.65 var(--font-body);
   color: var(--muted);
   max-width: 52ch;
 }
@@ -85,7 +85,7 @@
 
 .whoText {
   margin: 0;
-  font: 500 clamp(25px, 3.4vw, 38px) / 1.5 var(--font-heading);
+  font: 500 clamp(28px, 3.4vw, 38px) / 1.5 var(--font-heading);
   color: var(--ink);
   text-wrap: pretty;
 }
@@ -138,10 +138,51 @@
   line-height: 1.5;
 }
 
+.believeCol {
+  min-width: 0;
+}
+
 .believeTrack {
   display: flex;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  /* Horizontal only. Without this the flex box can also scroll vertically, so
+     a swipe drifts the section up and down while moving sideways. */
+  overflow-y: hidden;
+  /* Stops a horizontal swipe from chaining into the page's vertical scroll. */
+  overscroll-behavior-x: contain;
+  /* proximity, not mandatory: mandatory fights the finger on a short flick
+     and yanks the track back, which reads as the section jumping. */
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.believeTrack::-webkit-scrollbar {
+  display: none;
+}
+
+/* Drawn indicator, because iOS hides native scrollbars on touch. Only shown
+   when the track actually overflows. */
+.believeBar {
+  position: relative;
+  height: 2px;
+  margin-top: 28px;
+  background: var(--hairline);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.believeBar[data-visible='true'] {
+  opacity: 1;
+}
+
+.believeBarFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 2px;
+  width: 0;
+  background: var(--navy);
 }
 
 .believeItem {
@@ -158,13 +199,13 @@
 
 .believeTitle {
   margin: 20px 0 6px;
-  font: 700 20px/1.2 var(--font-heading);
+  font: 700 22px/1.2 var(--font-heading);
   color: var(--ink);
 }
 
 .believeBody {
   margin: 0;
-  font: 400 15.5px/1.65 var(--font-body);
+  font: 400 16.5px/1.65 var(--font-body);
   color: var(--muted);
   max-width: 32ch;
 }
@@ -250,7 +291,7 @@
 
 .focusValue {
   margin: 0;
-  font: 700 clamp(22px, 2.4vw, 30px) / 1.25 var(--font-heading);
+  font: 700 clamp(25px, 2.4vw, 30px) / 1.25 var(--font-heading);
   color: var(--paper);
 }
 
@@ -318,13 +359,13 @@
 
 .whyTitle {
   margin: 0 0 8px;
-  font: 700 19px/1.25 var(--font-heading);
+  font: 700 20px/1.25 var(--font-heading);
   color: var(--ink);
 }
 
 .whyText {
   margin: 0;
-  font: 400 15.5px/1.65 var(--font-body);
+  font: 400 16.5px/1.65 var(--font-body);
   color: var(--muted);
   max-width: 56ch;
 }
@@ -413,5 +454,46 @@
 @media (max-width: 1199px) {
   .spine {
     display: none;
+  }
+}
+
+
+/* ------------------------------------------------------------------
+   Mobile: the desktop rhythm leaves large empty bands on a phone, which
+   reads as an unfinished page rather than as restraint. Tighten the
+   section padding without touching the desktop spacing above.
+------------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+  .who {
+    padding: 64px var(--gutter);
+  }
+
+  .whoInner {
+    padding: 16px 0;
+  }
+
+  .believe {
+    padding: 64px var(--gutter) 72px;
+  }
+
+  .believeGrid {
+    gap: 24px;
+  }
+
+  .lookFor {
+    padding: 64px var(--gutter);
+  }
+
+  .why {
+    padding: 64px var(--gutter) 72px;
+  }
+
+  .splitGrid {
+    gap: 32px;
+  }
+
+  .lookForList {
+    gap: 32px;
   }
 }

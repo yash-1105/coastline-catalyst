@@ -65,7 +65,7 @@
 
 .h1 {
   margin: 0;
-  font: 700 clamp(40px, 6.4vw, 80px) / 1.08 var(--font-heading);
+  font: 700 clamp(44px, 6.4vw, 80px) / 1.08 var(--font-heading);
   letter-spacing: -0.02em;
   color: var(--paper);
   max-width: 16ch;
@@ -104,7 +104,7 @@
 
 .sub {
   margin: 0 0 36px;
-  font: 400 17px/1.65 var(--font-body);
+  font: 400 18px/1.65 var(--font-body);
   color: rgba(251, 251, 249, 0.85);
   max-width: 560px;
   animation: ccFadeUp 0.6s var(--ease) both;

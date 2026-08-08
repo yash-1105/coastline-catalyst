@@ -1,6 +1,6 @@
-import { BeliefIcon } from '@/components/Icons';
 import ScrollVideo from '@/components/ScrollVideo';
-import { believe, focus, lookFor, whoWeAre, whyPartner } from '@/lib/site';
+import BeliefTrack from './BeliefTrack';
+import { focus, lookFor, whoWeAre, whyPartner } from '@/lib/site';
 import styles from './Home.module.css';
 
 /* ---------- 01 / 07 ---------- */
@@ -43,15 +43,7 @@ export function WhatWeBelieve() {
             02 / 07
           </span>
         </div>
-        <div className={`${styles.believeTrack} cc-noscrollbar`}>
-          {believe.map((item, i) => (
-            <div key={item.title} className={styles.believeItem} data-reveal={i * 80}>
-              <BeliefIcon name={item.icon} />
-              <h3 className={styles.believeTitle}>{item.title}</h3>
-              <p className={styles.believeBody}>{item.body}</p>
-            </div>
-          ))}
-        </div>
+        <BeliefTrack />
       </div>
     </section>
   );
