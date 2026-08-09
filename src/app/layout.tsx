@@ -85,7 +85,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Without JavaScript nothing should ever stay hidden waiting for a reveal. */}
         <noscript>
-          {/* eslint-disable-next-line react/no-danger */}
           <style
             dangerouslySetInnerHTML={{
               __html:
@@ -95,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
+
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
         />
       </head>

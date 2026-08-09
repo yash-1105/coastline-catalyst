@@ -44,6 +44,11 @@ export default function ContactForm() {
   /* Blur and click handlers read this rather than their own render closure:
      autofill can fire input and blur inside one task. */
   const latest = useRef(values);
+  /* Deliberately during render, not in an effect. Autofill can fire input and
+     blur inside a single task, and an effect would not have run yet, so the
+     blur handler would read the pre-autofill values. That is the bug this ref
+     exists to fix. */
+  // eslint-disable-next-line react-hooks/refs
   latest.current = values;
 
   const emailOk = EMAIL_RE.test(values.email.trim());

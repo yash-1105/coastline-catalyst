@@ -139,6 +139,11 @@ export default function PitchForm() {
      closure: autofill can fire input and blur inside one task, which would
      otherwise raise an error against the previous value. */
   const latest = useRef({ values, file });
+  /* Deliberately during render, not in an effect. Autofill can fire input and
+     blur inside a single task, and an effect would not have run yet, so the
+     blur handler would validate the pre-autofill values. That is the bug this
+     ref exists to fix. */
+  // eslint-disable-next-line react-hooks/refs
   latest.current = { values, file };
 
   const stepPasses = (index: number) =>
@@ -342,7 +347,11 @@ export default function PitchForm() {
     'aria-describedby': errors[name] ? `err-${name}` : undefined,
   });
 
-  const ErrorText = ({ name }: { name: FieldName }) =>
+  /* A plain function, not a component. Declared inside the render it would be
+     a new component type on every keystroke, so React would unmount and
+     remount the <p> each time, and role="alert" means a screen reader
+     re-announces the error on every character typed. */
+  const errorText = (name: FieldName) =>
     errors[name] ? (
       <p id={`err-${name}`} role="alert" className={form.error}>
         {errors[name]}
@@ -405,7 +414,7 @@ export default function PitchForm() {
                       autoComplete="organization"
                       {...errorProps('company')}
                     />
-                    <ErrorText name="company" />
+                    {errorText('company')}
                   </div>
 
                   <div className={form.field}>
@@ -422,7 +431,7 @@ export default function PitchForm() {
                       autoComplete="name"
                       {...errorProps('founder')}
                     />
-                    <ErrorText name="founder" />
+                    {errorText('founder')}
                   </div>
 
                   <div className={form.field}>
@@ -440,7 +449,7 @@ export default function PitchForm() {
                       autoComplete="email"
                       {...errorProps('email')}
                     />
-                    <ErrorText name="email" />
+                    {errorText('email')}
                   </div>
 
                   <div className={form.field}>
@@ -516,7 +525,7 @@ export default function PitchForm() {
                         <option key={option}>{option}</option>
                       ))}
                     </select>
-                    <ErrorText name="stage" />
+                    {errorText('stage')}
                   </div>
 
                   <div className={form.field}>
@@ -550,7 +559,7 @@ export default function PitchForm() {
                       onBlur={onBlurField}
                       {...errorProps('industry')}
                     />
-                    <ErrorText name="industry" />
+                    {errorText('industry')}
                   </div>
 
                   <div className={form.field}>
@@ -567,7 +576,7 @@ export default function PitchForm() {
                       autoComplete="country-name"
                       {...errorProps('country')}
                     />
-                    <ErrorText name="country" />
+                    {errorText('country')}
                   </div>
                 </div>
 
@@ -589,7 +598,7 @@ export default function PitchForm() {
                     onBlur={onBlurField}
                     {...errorProps('desc')}
                   />
-                  <ErrorText name="desc" />
+                  {errorText('desc')}
                 </div>
               </div>
 
@@ -617,7 +626,7 @@ export default function PitchForm() {
                     onBlur={onBlurField}
                     {...errorProps('why')}
                   />
-                  <ErrorText name="why" />
+                  {errorText('why')}
                 </div>
 
                 <div>
@@ -675,7 +684,7 @@ export default function PitchForm() {
                     hidden
                     onChange={(e) => acceptFile(e.target.files?.[0])}
                   />
-                  <ErrorText name="file" />
+                  {errorText('file')}
                 </div>
 
                 <div className={form.field}>

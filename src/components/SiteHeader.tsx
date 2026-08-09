@@ -34,8 +34,19 @@ export default function SiteHeader() {
     }
   });
 
-  // Close the panel on navigation.
-  useEffect(() => setNavOpen(false), [pathname]);
+  /* Close the panel on navigation. Keyed off the route actually changing
+     rather than off the click, so it also covers back/forward and any
+     navigation that does not start in this menu.
+
+     Adjusted during render rather than in an effect. React re-runs this
+     component immediately, before anything is committed to the screen, so the
+     open panel never gets painted over the new page: an effect would close it
+     one frame late and it would flash. */
+  const [renderedPath, setRenderedPath] = useState(pathname);
+  if (renderedPath !== pathname) {
+    setRenderedPath(pathname);
+    setNavOpen(false);
+  }
 
   // Escape closes it, and the page behind must not scroll while it is open.
   useEffect(() => {

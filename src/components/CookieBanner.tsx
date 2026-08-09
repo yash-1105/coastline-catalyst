@@ -9,8 +9,15 @@ const STORAGE_KEY = 'cc-cookie-choice';
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
+  /* Deliberately post-mount, which is what the rule is objecting to. The
+     server cannot read localStorage, so the banner has to start hidden and
+     appear only once we know the visitor has not already answered. Rendering
+     it optimistically would flash it at everyone who dismissed it long ago,
+     and the one extra render it costs happens once per session on an element
+     that is fixed-position and outside the page flow. */
   useEffect(() => {
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (!localStorage.getItem(STORAGE_KEY)) setVisible(true);
     } catch {
       // Storage blocked: stay quiet rather than nag on every page.

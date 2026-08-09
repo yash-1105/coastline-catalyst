@@ -14,7 +14,6 @@ const HEADLINE = [
 ];
 
 export default function Hero() {
-  let wordIndex = -1;
 
   return (
     <section className={styles.hero} data-sec>
@@ -37,10 +36,17 @@ export default function Hero() {
             <p className={styles.eyebrow}>Early-stage investment · India × GCC</p>
 
             <h1 className={styles.h1}>
-              {HEADLINE.map((line, li) => (
+              {HEADLINE.map((line, li) => {
+                /* The stagger runs across the whole headline rather than
+                   restarting per line, so each line starts from the running
+                   count of the words before it. Derived rather than a counter
+                   mutated mid-render: React may render this more than once,
+                   and a shared counter would keep climbing. */
+                const before = HEADLINE.slice(0, li).reduce((n, l) => n + l.length, 0);
+                return (
                 <span key={li} className={styles.line}>
-                  {line.map((word) => {
-                    wordIndex += 1;
+                  {line.map((word, wi) => {
+                    const wordIndex = before + wi;
                     return (
                       <span key={word + wordIndex} className={styles.mask}>
                         <span
@@ -53,7 +59,8 @@ export default function Hero() {
                     );
                   })}
                 </span>
-              ))}
+                );
+              })}
             </h1>
 
             {/* The horizon line: full content width, drawn left to right. */}

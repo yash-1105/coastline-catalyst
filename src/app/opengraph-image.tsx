@@ -36,7 +36,6 @@ export default async function OpengraphImage() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={markSrc} width={52} height={52} alt="" />
           <span style={{ fontSize: 30, fontWeight: 700, color: '#0C1116' }}>{site.name}</span>
         </div>

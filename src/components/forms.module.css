@@ -109,3 +109,27 @@
 .captchaLive {
   min-height: 78px;
 }
+
+/* Shown only when Turnstile reports an error. Without this the widget just
+   sits there dead and the visitor has no way to tell what went wrong or what
+   to do about it. */
+.captchaError {
+  margin: 10px 0 0;
+  font: 400 13px/1.6 var(--font-body);
+  color: var(--error);
+  max-width: 46ch;
+}
+
+.captchaRetry {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: 500 13px/1.6 var(--font-body);
+  color: var(--navy);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.captchaRetry:hover {
+  color: var(--tide);
+}

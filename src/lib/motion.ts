@@ -33,7 +33,12 @@ export function useReducedMotion(): boolean {
  */
 export function useRafScroll(onFrame: () => void, enabled = true) {
   const cb = useRef(onFrame);
-  cb.current = onFrame;
+  /* Assigned in an effect rather than during render. The rAF loop only reads
+     this on animation frames, which run after effects flush, so it never sees
+     a stale callback. */
+  useEffect(() => {
+    cb.current = onFrame;
+  }, [onFrame]);
 
   useEffect(() => {
     if (!enabled) return;
