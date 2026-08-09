@@ -88,7 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* eslint-disable-next-line react/no-danger */}
           <style
             dangerouslySetInnerHTML={{
-              __html: '[data-reveal]{opacity:1!important;transform:none!important}',
+              __html:
+                '[data-reveal]{opacity:1!important;transform:none!important}[data-reveal] img{filter:none!important}',
             }}
           />
         </noscript>

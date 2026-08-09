@@ -139,19 +139,31 @@
   gap: 18px;
 }
 
-/* Only photographs on this site: square, radius 8, grayscale to colour. */
+/* Only photographs on this site: square, radius 8, grayscale to colour.
+   The warm-up is driven by the scroll reveal rather than by :hover, which
+   does not exist on a touch screen: on a phone the old rule meant the photo
+   simply stayed grey forever. Now it warms as the card enters view, once, on
+   every device. */
 .photo {
   position: relative;
   width: min(220px, 100%);
   aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;
-  filter: grayscale(1);
-  transition: filter 0.4s ease;
+  transition: filter 0.9s var(--ease);
 }
 
-.partnerCard:hover .photo:not(.photoSlot) {
-  filter: grayscale(0);
+/* Grey only while the card is still waiting to be revealed, and only where
+   the reveal system actually runs. Without this guard a reduced-motion or
+   no-JS visitor would be left looking at a permanently grey photo. */
+:global(html.js) .partnerCard[data-reveal]:not([data-revealed]) .photo:not(.photoSlot) {
+  filter: grayscale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html.js) .partnerCard[data-reveal]:not([data-revealed]) .photo:not(.photoSlot) {
+    filter: none;
+  }
 }
 
 .photo img {
