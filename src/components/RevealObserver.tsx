@@ -26,10 +26,30 @@ export default function RevealObserver() {
       { threshold: 0.15 },
     );
 
+    /* A second, much later trigger for effects that need to be watched rather
+       than merely fired. [data-reveal] runs at 15% entry, which is right for a
+       fade-up but useless for the partner photo warming from grey to colour:
+       at 15% the card has barely cleared the fold, so the transition finishes
+       before anyone is looking at it, and the card's own fade-in masks what
+       little is visible. 60% means the element is properly on screen. */
+    const warm = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          (entry.target as HTMLElement).dataset.warmed = 'true';
+          warm.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.6 },
+    );
+
     const observeAll = () => {
       document
         .querySelectorAll<HTMLElement>('[data-reveal]:not([data-revealed])')
         .forEach((el) => io.observe(el));
+      document
+        .querySelectorAll<HTMLElement>('[data-warm]:not([data-warmed])')
+        .forEach((el) => warm.observe(el));
     };
 
     observeAll();
@@ -41,6 +61,7 @@ export default function RevealObserver() {
     return () => {
       mo.disconnect();
       io.disconnect();
+      warm.disconnect();
     };
   }, []);
 

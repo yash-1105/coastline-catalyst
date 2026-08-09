@@ -241,6 +241,89 @@ export const principles: Principle[] = [
   },
 ];
 
+/* ---------------------------------------------------------------------------
+ * Beyond capital
+ *
+ * Deliberately more specific than the home page's "Why founders partner with
+ * us", which stays as the short version. This is the detailed breakdown.
+ * ------------------------------------------------------------------------- */
+
+export const capabilities: Item[] = [
+  {
+    title: 'Finance',
+    body: 'Financial modelling, unit economics, pricing, financial discipline and fundraising readiness.',
+  },
+  {
+    title: 'Sales',
+    body: 'Go-to-market strategy, enterprise introductions, commercial partnerships and revenue development.',
+  },
+  {
+    title: 'Marketing',
+    body: 'Positioning, customer acquisition, brand strategy and growth initiatives.',
+  },
+  {
+    title: 'GCC expansion',
+    body: 'Market-entry strategy, local introductions, partnerships and access to customers across the Middle East.',
+  },
+  {
+    title: 'Fundraising',
+    body: 'Investor preparation, financial storytelling, fundraising strategy and access to the wider investment ecosystem.',
+  },
+  {
+    title: 'Strategy',
+    body: 'Business model refinement, strategic decision-making and support through key growth milestones.',
+  },
+];
+
+export const beyondCapital = {
+  eyebrow: 'Beyond capital',
+  heading: 'More than a cheque',
+  body: 'Capital is important. But early-stage companies need more than money to move from traction to scale. We work with founders where our experience, networks and capabilities can create the greatest impact.',
+} as const;
+
+/** The corridor, stated plainly. Rendered as a navy band. */
+export const corridor = {
+  eyebrow: 'India × GCC',
+  heading: 'From India to the GCC. And back again.',
+  paragraphs: [
+    'India is home to exceptional founders, talent and innovation.',
+    // "rapily" in the source, corrected to "rapidly".
+    'The GCC offers rapidly expanding markets, significant purchasing power, strategic capital and an increasingly sophisticated startup ecosystem.',
+  ],
+} as const;
+
+/* ---------------------------------------------------------------------------
+ * How we work
+ *
+ * The numbers are rendered by the layout, so the copy carries no numeric
+ * prefixes: those arrived with em dashes, which the house style bans.
+ * ------------------------------------------------------------------------- */
+
+export const howWeWork = {
+  eyebrow: 'How we work',
+  heading: 'Built around the founder',
+  body: "We aim to be a high-conviction, high-engagement partner throughout the early stages of a company's journey.",
+  steps: [
+    { title: 'Meet', body: 'We get to know the founder, the business and the problem being solved.' },
+    {
+      title: 'Understand',
+      body: 'We assess the market, traction, economics, business model and potential.',
+    },
+    {
+      title: 'Invest',
+      body: "We provide capital aligned with the company's immediate growth objectives.",
+    },
+    {
+      title: 'Build together',
+      body: 'We work alongside founders where our experience, network and capabilities can create the greatest value.',
+    },
+    {
+      title: 'Scale',
+      body: 'As the business grows, we help unlock new customers, markets, partnerships and capital.',
+    },
+  ],
+} as const;
+
 export const ctaBand = {
   heading: 'Ready to build?',
   body: "If you're building something ambitious, we'd like to hear about it early.",

@@ -1,7 +1,18 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { LinkedInIcon } from '@/components/Icons';
-import { foundingIdeas, initialsOf, partners, principles, site } from '@/lib/site';
+import WaveMotif from '@/components/WaveMotif';
+import {
+  beyondCapital,
+  capabilities,
+  corridor,
+  foundingIdeas,
+  howWeWork,
+  initialsOf,
+  partners,
+  principles,
+  site,
+} from '@/lib/site';
 import styles from './about.module.css';
 
 export const metadata: Metadata = {
@@ -87,6 +98,70 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <p className={styles.label} data-reveal="0">
+            {beyondCapital.eyebrow}
+          </p>
+          <h2 className={styles.h2} data-reveal="60">
+            {beyondCapital.heading}
+          </h2>
+          <p className={styles.sectionLede} data-reveal="60">
+            {beyondCapital.body}
+          </p>
+          <div className={styles.capabilityGrid}>
+            {capabilities.map((item, i) => (
+              <div key={item.title} className={styles.capability} data-reveal={i * 60}>
+                <h3 className={styles.capabilityTitle}>{item.title}</h3>
+                <p className={styles.capabilityBody}>{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.corridor}>
+        <WaveMotif height={150} opacity={0.07} />
+        <div className={styles.corridorInner}>
+          <p className={styles.corridorEyebrow} data-reveal="0">
+            {corridor.eyebrow}
+          </p>
+          <h2 className={styles.corridorHeading} data-reveal="60">
+            {corridor.heading}
+          </h2>
+          <div className={styles.corridorBody} data-reveal="120">
+            {corridor.paragraphs.map((paragraph) => (
+              <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <p className={styles.label} data-reveal="0">
+            {howWeWork.eyebrow}
+          </p>
+          <h2 className={styles.h2} data-reveal="60">
+            {howWeWork.heading}
+          </h2>
+          <p className={styles.sectionLede} data-reveal="60">
+            {howWeWork.body}
+          </p>
+          <ol className={styles.steps}>
+            {howWeWork.steps.map((step, i) => (
+              <li key={step.title} className={styles.step} data-reveal={i * 70}>
+                <span className={styles.stepNum}>{`0${i + 1}`}</span>
+                <div>
+                  <h3 className={styles.stepTitle}>{step.title}</h3>
+                  <p className={styles.stepBody}>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
       <section className={styles.partnersSection}>
         <div className={styles.wrap}>
           <p className={styles.label} data-reveal="0">
@@ -99,7 +174,7 @@ export default function AboutPage() {
             {partners.map((partner, i) => (
               <div key={partner.name} className={styles.partnerCard} data-reveal={i * 80}>
                 {partner.photo ? (
-                  <div className={styles.photo}>
+                  <div className={styles.photo} data-warm>
                     <Image
                       src={partner.photo}
                       alt={`${partner.name}, ${partner.role} at ${site.name}`}

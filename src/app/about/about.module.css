@@ -150,18 +150,18 @@
   aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;
-  transition: filter 0.9s var(--ease);
+  transition: filter 1.2s var(--ease);
 }
 
 /* Grey only while the card is still waiting to be revealed, and only where
    the reveal system actually runs. Without this guard a reduced-motion or
    no-JS visitor would be left looking at a permanently grey photo. */
-:global(html.js) .partnerCard[data-reveal]:not([data-revealed]) .photo:not(.photoSlot) {
+:global(html.js) .photo[data-warm]:not([data-warmed]) {
   filter: grayscale(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(html.js) .partnerCard[data-reveal]:not([data-revealed]) .photo:not(.photoSlot) {
+  :global(html.js) .photo[data-warm]:not([data-warmed]) {
     filter: none;
   }
 }
@@ -227,4 +227,136 @@
 
 .partnerLink:hover {
   color: var(--tide);
+}
+
+/* ---------- Beyond capital ---------- */
+
+.sectionLede {
+  margin: -24px 0 48px;
+  font: 400 16.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.capabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px 64px;
+}
+
+.capability {
+  border-top: 1px solid var(--hairline);
+  padding-top: 22px;
+}
+
+.capabilityTitle {
+  margin: 0 0 10px;
+  font: 700 20px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+
+.capabilityBody {
+  margin: 0;
+  font: 400 15.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+/* ---------- India x GCC band ----------
+   A navy band, echoing Investment focus on the home page. The corridor is the
+   firm's whole thesis, so it gets the emphasis a full-bleed band carries. */
+
+.corridor {
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+}
+
+.corridorInner {
+  position: relative;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: clamp(72px, 9vw, 120px) var(--gutter);
+}
+
+.corridorEyebrow {
+  margin: 0 0 20px;
+  font: 500 12px/1 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-70);
+}
+
+.corridorHeading {
+  margin: 0 0 32px;
+  font: 700 clamp(30px, 4vw, 46px) / 1.12 var(--font-heading);
+  letter-spacing: -0.015em;
+  color: var(--paper);
+  max-width: 20ch;
+}
+
+.corridorBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 62ch;
+}
+
+.corridorBody p {
+  margin: 0;
+  font: 400 17px/1.7 var(--font-body);
+  color: rgba(251, 251, 249, 0.78);
+}
+
+/* ---------- How we work ---------- */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 48px;
+  padding: 26px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.stepNum {
+  flex: 0 0 64px;
+  font: 500 12px/2 var(--font-body);
+  letter-spacing: 0.08em;
+  color: var(--navy);
+  font-feature-settings: 'tnum';
+}
+
+.step > div {
+  flex: 1 1 420px;
+}
+
+.stepTitle {
+  margin: 0 0 8px;
+  font: 700 19px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+
+.stepBody {
+  margin: 0;
+  font: 400 15.5px/1.65 var(--font-body);
+  color: var(--muted);
+  max-width: 64ch;
+}
+
+@media (max-width: 700px) {
+  .section,
+  .partnersSection {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .capabilityGrid {
+    gap: 28px;
+  }
 }
