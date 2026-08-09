@@ -121,14 +121,14 @@ export const partners: Partner[] = [
   {
     name: 'Nadeem Najeeb',
     role: 'Co-Founder & Partner',
-    // Drop a square photo in /public/partners/ and set the path here.
-    photo: null,
+    photo: '/partners/nadeem-najeeb.webp',
     bio: 'Nadeem Najeeb is a corporate finance and growth professional with experience across investment, strategy and finance in the GCC and India. With a background spanning finance, startups and emerging businesses, he brings a strong focus on financial discipline and commercial strategy.',
     linkedin: 'https://www.linkedin.com/in/nadeem-najeeb-38aa89126/',
   },
   {
     name: 'Sabil Abdullakutty',
     role: 'Co-Founder & Partner',
+    // Drop a square photo in /public/partners/ and set the path here.
     photo: null,
     bio: 'Sabil Abdullakutty is a startup investor and growth operator with experience supporting early-stage companies from traction to scale. He focuses on helping founders accelerate growth across sales, marketing, and finance, while leveraging strong networks across India and the Middle East to open new markets and opportunities.',
     linkedin: 'https://www.linkedin.com/in/sabil-abdullakutty-8a4708120/',

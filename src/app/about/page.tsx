@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import CtaBand from '@/components/CtaBand';
 import { LinkedInIcon } from '@/components/Icons';
 import { foundingIdeas, initialsOf, partners, principles, site } from '@/lib/site';
 import styles from './about.module.css';
@@ -135,8 +134,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <CtaBand />
     </main>
   );
 }
