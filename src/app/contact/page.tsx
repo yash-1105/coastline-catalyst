@@ -48,8 +48,12 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <p className={styles.detailLabel}>Location</p>
-                <p className={styles.detailValue}>{site.location}</p>
+                <p className={styles.detailLabel}>Office</p>
+                <address className={styles.detailAddress}>
+                  {site.addressLines.map((line) => (
+                    <span key={line}>{line}</span>
+                  ))}
+                </address>
               </div>
 
               <div className={styles.pitchNote}>

@@ -55,8 +55,13 @@
   color: var(--navy);
 }
 
-.location {
-  font: 400 14px/1.5 var(--font-body);
+/* `address` is reset to normal style in globals.css: the house rule bans
+   italics everywhere. */
+.address {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font: 400 14px/1.55 var(--font-body);
   color: var(--muted);
 }
 

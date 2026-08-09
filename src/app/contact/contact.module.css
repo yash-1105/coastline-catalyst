@@ -66,6 +66,14 @@
   color: var(--ink);
 }
 
+.detailAddress {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font: 500 17px/1.45 var(--font-body);
+  color: var(--ink);
+}
+
 .pitchNote {
   border-top: 1px solid var(--rule);
   padding-top: 28px;

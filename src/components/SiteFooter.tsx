@@ -35,7 +35,11 @@ export default function SiteFooter() {
           >
             LinkedIn
           </a>
-          <span className={styles.location}>{site.location}</span>
+          <address className={styles.address}>
+            {site.addressLines.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+          </address>
         </div>
       </div>
 

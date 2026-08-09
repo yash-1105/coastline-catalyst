@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import CtaBand from '@/components/CtaBand';
 import { LinkedInIcon } from '@/components/Icons';
-import { initialsOf, mission, partners, principles, site, vision } from '@/lib/site';
+import { foundingIdeas, initialsOf, partners, principles, site } from '@/lib/site';
 import styles from './about.module.css';
 
 export const metadata: Metadata = {
@@ -23,6 +23,7 @@ const partnerLd = partners.map((partner) => ({
   name: partner.name,
   jobTitle: partner.role,
   worksFor: { '@type': 'Organization', name: site.name },
+  ...(partner.linkedin.startsWith('http') ? { sameAs: [partner.linkedin] } : {}),
 }));
 
 export default function AboutPage() {
@@ -43,14 +44,24 @@ export default function AboutPage() {
       </section>
 
       <section className={styles.section}>
-        <div className={styles.twoCol}>
-          <div data-reveal="0">
-            <p className={styles.label}>Mission</p>
-            <p className={styles.lede}>{mission}</p>
-          </div>
-          <div data-reveal="80">
-            <p className={styles.label}>Vision</p>
-            <p className={styles.lede}>{vision}</p>
+        <div className={styles.wrap}>
+          <p className={styles.label} data-reveal="0">
+            What we believe
+          </p>
+          <h2 className={styles.h2} data-reveal="60">
+            We are building this on two simple ideas
+          </h2>
+          <div className={styles.twoCol}>
+            {foundingIdeas.map((idea, i) => (
+              <div key={idea.title} data-reveal={i * 80}>
+                <h3 className={styles.ideaTitle}>{idea.title}</h3>
+                {idea.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 32)} className={styles.lede}>
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>

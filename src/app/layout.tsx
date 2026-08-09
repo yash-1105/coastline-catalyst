@@ -64,9 +64,19 @@ const organizationLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: site.name,
+  legalName: site.legalName,
   description: 'Early-stage investment firm partnering with founders across India and the GCC.',
   url: site.baseUrl,
   email: site.email,
+  sameAs: [site.linkedinUrl],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '69/1854-A1, GFX44, SRM Road, Kaloor',
+    addressLocality: 'Kochi',
+    addressRegion: 'Kerala',
+    postalCode: '682018',
+    addressCountry: 'IN',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

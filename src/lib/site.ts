@@ -5,10 +5,24 @@
 
 export const site = {
   name: 'Coastline Catalyst',
+  legalName: 'Coastline Catalyst LLP',
   baseUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://coastlinecatalyst.com',
   email: 'hello@coastlinecatalyst.com',
-  linkedinUrl: '#',
-  location: '[City, India]',
+  linkedinUrl: 'https://www.linkedin.com/company/coastline-catalyst/',
+  /** Compact form, for places with room for one line. */
+  location: 'Kochi, Kerala, India',
+  /** Display address. Tidied from the registry form, which repeats Ernakulam
+   *  three times; the full registered string is kept below for legal copy. */
+  addressLines: [
+    'Coastline Catalyst LLP',
+    '69/1854-A1, GFX44, SRM Road',
+    'Kaloor, Kochi',
+    'Ernakulam, Kerala 682018',
+    'India',
+  ],
+  /** Exactly as registered. Used where the legal address must be verbatim. */
+  registeredAddress:
+    'Coastline Catalyst LLP, 69/1854 - A1, GFX44, SRM Road, Kaloor, Kochi, Ernakulam North, North police station, Kochi, Ernakulam, Ernakulam, Ernakulam - 682018, Kerala, India',
   tagline: 'Early-stage investment. India and the GCC.',
   description:
     'Coastline Catalyst is an early-stage investment firm partnering with ambitious founders across India, with a long-term vision of connecting innovation between India and the GCC.',
@@ -106,17 +120,18 @@ export type Partner = {
 export const partners: Partner[] = [
   {
     name: 'Nadeem Najeeb',
-    role: 'Founder & Partner',
+    role: 'Co-Founder & Partner',
+    // Drop a square photo in /public/partners/ and set the path here.
     photo: null,
-    bio: '[Bio to be added] Finance, growth investments, and founder partnerships across the GCC and India. Placeholder copy of realistic length so the card sets correctly; replace with three to four lines about background and focus.',
-    linkedin: '#',
+    bio: 'Nadeem Najeeb is a corporate finance and growth professional with experience across investment, strategy and finance in the GCC and India. With a background spanning finance, startups and emerging businesses, he brings a strong focus on financial discipline and commercial strategy.',
+    linkedin: 'https://www.linkedin.com/in/nadeem-najeeb-38aa89126/',
   },
   {
     name: 'Sabil Abdullakutty',
-    role: 'Partner',
+    role: 'Co-Founder & Partner',
     photo: null,
-    bio: '[Bio to be added] Startup ecosystem connectivity and deal sourcing. Placeholder copy of realistic length so the card sets correctly; replace with three to four lines about background and focus.',
-    linkedin: '#',
+    bio: 'Sabil Abdullakutty is a startup investor and growth operator with experience supporting early-stage companies from traction to scale. He focuses on helping founders accelerate growth across sales, marketing, and finance, while leveraging strong networks across India and the Middle East to open new markets and opportunities.',
+    linkedin: 'https://www.linkedin.com/in/sabil-abdullakutty-8a4708120/',
   },
 ];
 
@@ -174,11 +189,32 @@ export const whyPartner: Item[] = [
 export const whoWeAre =
   'We back exceptional founders early and work alongside them well beyond capital. We invest early, stay involved, and help businesses unlock opportunities through strategic guidance, commercial networks, and connections between India and the GCC.';
 
-export const mission =
-  'To back exceptional founders at the earliest stages and work alongside them well beyond capital, with strategic guidance, commercial introductions, and the patience that building a durable business requires.';
-
-export const vision =
-  'A generation of businesses that grow across the India-GCC corridor: built in India, trusted in the Gulf, and connected by the relationships, capital, and market understanding that move between the two.';
+/**
+ * The two ideas the firm is built on, in the founders' own words.
+ *
+ * Three copy corrections were made to the supplied text, all noted here so
+ * they can be reversed if they were not typos:
+ *   - "building a gre." completed to "building a great company"
+ *   - "om traction to scale" corrected to "from traction to scale"
+ *   - two em dashes replaced with commas, since the house style bans them
+ */
+export const foundingIdeas: { title: string; paragraphs: string[] }[] = [
+  {
+    title: 'We are Coastline Catalyst',
+    paragraphs: [
+      'In science, a catalyst accelerates a reaction without being consumed by it. That is the role we aim to play for the founders we back.',
+      'The early stages of a company are defined by speed, experimentation and execution. We go beyond providing capital by working alongside founders across sales, marketing and finance, helping them make better decisions, move faster and build with greater confidence.',
+      'With our strong presence across the Middle East, we also help ambitious Indian startups explore and unlock opportunities in the GCC, connecting founders to the right networks, customers, partners and markets.',
+    ],
+  },
+  {
+    title: 'Capital is a resource',
+    paragraphs: [
+      'Capital is important, but it is only one part of building a great company. Our role is to provide the funding and support founders need to focus on what matters most: building, scaling and creating lasting value.',
+      'We back early-stage businesses that have demonstrated initial traction or revenue and are ready to take their next significant step. Our capital is not the destination, it is the fuel that gives founders the capacity to execute their vision faster and reach the next stage of growth.',
+    ],
+  },
+];
 
 export type Principle = { num: string; title: string; body: string };
 
@@ -225,7 +261,7 @@ export const revenueOptions = [
 export type PrivacySection = { id: string; tocLabel: string; heading: string; body: string };
 
 export const privacyLastUpdated = '[1 August 2026]';
-export const privacyPostalAddress = '[registered address]';
+export const privacyPostalAddress = site.registeredAddress;
 
 export const privacySections: PrivacySection[] = [
   {

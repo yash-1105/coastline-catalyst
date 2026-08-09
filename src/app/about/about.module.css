@@ -63,10 +63,20 @@
 }
 
 .lede {
-  margin: 0;
+  margin: 0 0 16px;
   font: 400 16.5px/1.65 var(--font-body);
   color: var(--ink);
   max-width: 52ch;
+}
+
+.lede:last-child {
+  margin-bottom: 0;
+}
+
+.ideaTitle {
+  margin: 0 0 14px;
+  font: 700 22px/1.25 var(--font-heading);
+  color: var(--ink);
 }
 
 .h2 {
