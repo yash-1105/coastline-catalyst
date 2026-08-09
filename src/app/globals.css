@@ -13,6 +13,13 @@
   --muted: #6b7280;
   --error: #a5453c;
 
+  /* Navy at 72% over Paper, resolved to a flat value rather than left as an
+     alpha so it stays predictable on the tinted cards. It is the same family
+     as --muted but carries the navy cast, and it reads at 5.4:1 on Paper
+     against --muted's 4.7:1, so it is the stronger choice as well as the
+     warmer one. */
+  --slate: #516b7f;
+
   /* 12% navy: the hairline used across Home */
   --hairline: rgba(15, 51, 80, 0.12);
   --hairline-strong: rgba(15, 51, 80, 0.18);

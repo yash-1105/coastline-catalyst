@@ -48,7 +48,9 @@ export default function AboutPage() {
       <section className={styles.hero}>
         <div className={styles.wrap}>
           <p className={styles.eyebrow}>About</p>
-          <h1 className={styles.h1}>We invest early, and we stay.</h1>
+          <h1 className={styles.h1}>
+            We invest early, <span className={styles.h1Accent}>and we stay.</span>
+          </h1>
           <div className={styles.horizon} />
         </div>
       </section>
@@ -87,7 +89,8 @@ export default function AboutPage() {
           <div>
             {principles.map((principle) => (
               <div key={principle.num} className={styles.principle} data-reveal="60">
-                <span className={styles.principleNum}>{principle.num}</span>
+                <span className={styles.drawnRule} data-rule aria-hidden="true" />
+                <span className={styles.principleNum} data-num>{principle.num}</span>
                 <div className={styles.principleBody}>
                   <h3 className={styles.principleTitle}>{principle.title}</h3>
                   <p className={styles.principleText}>{principle.body}</p>
@@ -112,6 +115,7 @@ export default function AboutPage() {
           <div className={styles.capabilityGrid}>
             {capabilities.map((item, i) => (
               <div key={item.title} className={styles.capability} data-reveal={i * 60}>
+                <span className={styles.drawnRule} data-rule aria-hidden="true" />
                 <h3 className={styles.capabilityTitle}>{item.title}</h3>
                 <p className={styles.capabilityBody}>{item.body}</p>
               </div>
@@ -151,7 +155,8 @@ export default function AboutPage() {
           <ol className={styles.steps}>
             {howWeWork.steps.map((step, i) => (
               <li key={step.title} className={styles.step} data-reveal={i * 70}>
-                <span className={styles.stepNum}>{`0${i + 1}`}</span>
+                <span className={styles.drawnRule} data-rule aria-hidden="true" />
+                <span className={styles.stepNum} data-num>{`0${i + 1}`}</span>
                 <div>
                   <h3 className={styles.stepTitle}>{step.title}</h3>
                   <p className={styles.stepBody}>{step.body}</p>

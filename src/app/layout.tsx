@@ -89,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <style
             dangerouslySetInnerHTML={{
               __html:
-                '[data-reveal]{opacity:1!important;transform:none!important}[data-reveal] img{filter:none!important}[data-warm]{filter:none!important}',
+                '[data-reveal]{opacity:1!important;transform:none!important}[data-reveal]::after{transform:none!important}[data-reveal] img{filter:none!important}[data-warm]{filter:none!important}[data-rule],[data-num]{opacity:1!important;transform:none!important}',
             }}
           />
         </noscript>

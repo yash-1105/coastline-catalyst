@@ -1,3 +1,15 @@
+/* ------------------------------------------------------------------
+   About carries a navy layer the other pages do not: section headings
+   in Navy, eyebrows in Tide, secondary copy in Slate, and hairlines
+   tinted with navy rather than left neutral grey. Ink is kept for the
+   things that have to punch hardest, so the page still has a black.
+
+   Every scroll-triggered draw below hangs off [data-revealed], which
+   RevealObserver sets. It never runs under reduced motion, so each
+   collapsed state is guarded twice: scoped to html.js, and released
+   again in the reduced-motion block at the foot of this file.
+------------------------------------------------------------------ */
+
 .hero {
   padding: clamp(72px, 10vw, 140px) var(--gutter) clamp(56px, 7vw, 96px);
 }
@@ -12,8 +24,21 @@
   font: 500 12px/1 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--tide);
   animation: ccFadeUp 0.6s var(--ease) both;
+}
+
+/* A short rule leading into every eyebrow. Cheap, but it puts a mark of
+   colour at the head of each section and ties them into the horizon. */
+.eyebrow::before,
+.label::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--tide);
 }
 
 .h1 {
@@ -26,7 +51,15 @@
   animation-delay: 0.1s;
 }
 
+/* The second clause in Navy. The headline is the one place on the page
+   where the colour shift carries meaning rather than decoration: "we
+   stay" is the promise, so it gets the firm's colour. */
+.h1Accent {
+  color: var(--navy);
+}
+
 .horizon {
+  position: relative;
   height: 1px;
   background: var(--navy);
   max-width: 480px;
@@ -36,9 +69,25 @@
   animation-delay: 0.4s;
 }
 
+/* A second, shorter line drawing just behind the first: two lines at
+   different lengths reading as a coastline rather than a rule. */
+.horizon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 46%;
+  height: 1px;
+  background: var(--tide);
+  opacity: 0.6;
+  transform-origin: left;
+  animation: ccDraw 0.8s var(--ease) both;
+  animation-delay: 0.62s;
+}
+
 .section {
   padding: clamp(56px, 7vw, 96px) var(--gutter);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--hairline);
 }
 
 .partnersSection {
@@ -59,7 +108,7 @@
   font: 500 12px/1 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--tide);
 }
 
 .lede {
@@ -80,21 +129,41 @@
 }
 
 .h2 {
-  margin: 0 0 48px;
+  position: relative;
+  margin: 0 0 44px;
+  padding-bottom: 22px;
   font: 700 clamp(26px, 3.4vw, 38px) / 1.15 var(--font-heading);
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--navy);
   max-width: 22ch;
+}
+
+/* Draws left to right as the heading arrives, a beat after the text has
+   settled. Same gesture as the hero horizon, one section down. */
+.h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 2px;
+  background: var(--navy);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease) 0.18s;
+}
+
+:global(html.js) .h2[data-reveal]:not([data-revealed])::after {
+  transform: scaleX(0);
 }
 
 /* ---- Investment philosophy ---- */
 
 .principle {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 12px 48px;
   padding: 28px 0;
-  border-top: 1px solid var(--rule);
 }
 
 .principleNum {
@@ -118,7 +187,7 @@
 .principleText {
   margin: 0;
   font: 400 15.5px/1.65 var(--font-body);
-  color: var(--muted);
+  color: var(--slate);
   max-width: 64ch;
 }
 
@@ -131,12 +200,22 @@
 }
 
 .partnerCard {
-  border: 1px solid var(--rule);
+  border: 1px solid var(--hairline);
   border-radius: 8px;
   padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  transition: border-color 0.3s ease, transform 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+
+@media (hover: hover) {
+  .partnerCard:hover {
+    border-color: var(--hairline-strong);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
 }
 
 /* Only photographs on this site: square, radius 8, grayscale to colour.
@@ -160,12 +239,6 @@
   filter: grayscale(1);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :global(html.js) .photo[data-warm]:not([data-warmed]) {
-    filter: none;
-  }
-}
-
 .photo img {
   object-fit: cover;
 }
@@ -175,7 +248,8 @@
 .photoSlot {
   composes: photo;
   filter: none;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--hairline);
+  background: var(--navy-tint);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -192,7 +266,7 @@
 
 .photoSlotNote {
   font: 400 12px/1.4 var(--font-body);
-  color: var(--muted);
+  color: var(--slate);
 }
 
 .partnerName {
@@ -204,7 +278,7 @@
 .partnerRole {
   margin: 0;
   font: 500 13px/1.5 var(--font-body);
-  color: var(--muted);
+  color: var(--tide);
 }
 
 .partnerBio {
@@ -221,20 +295,21 @@
   font: 500 14px/1 var(--font-body);
   color: var(--navy);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, gap 0.2s ease;
   align-self: flex-start;
 }
 
 .partnerLink:hover {
   color: var(--tide);
+  gap: 11px;
 }
 
 /* ---------- Beyond capital ---------- */
 
 .sectionLede {
-  margin: -24px 0 48px;
+  margin: -20px 0 48px;
   font: 400 16.5px/1.65 var(--font-body);
-  color: var(--muted);
+  color: var(--slate);
   max-width: 62ch;
 }
 
@@ -245,21 +320,37 @@
 }
 
 .capability {
-  border-top: 1px solid var(--hairline);
+  position: relative;
   padding-top: 22px;
+  transition: transform 0.4s var(--ease);
 }
 
 .capabilityTitle {
   margin: 0 0 10px;
   font: 700 20px/1.25 var(--font-heading);
   color: var(--ink);
+  transition: color 0.3s ease;
 }
 
 .capabilityBody {
   margin: 0;
   font: 400 15.5px/1.65 var(--font-body);
-  color: var(--muted);
+  color: var(--slate);
   max-width: 44ch;
+}
+
+@media (hover: hover) {
+  .capability:hover {
+    transform: translateY(-3px);
+  }
+
+  .capability:hover .capabilityTitle {
+    color: var(--navy);
+  }
+
+  .capability:hover .drawnRule {
+    background: var(--tide);
+  }
 }
 
 /* ---------- India x GCC band ----------
@@ -285,6 +376,16 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--paper-70);
+}
+
+.corridorEyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--paper-40);
 }
 
 .corridorHeading {
@@ -317,11 +418,11 @@
 }
 
 .step {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 12px 48px;
   padding: 26px 0;
-  border-top: 1px solid var(--rule);
 }
 
 .stepNum {
@@ -345,8 +446,42 @@
 .stepBody {
   margin: 0;
   font: 400 15.5px/1.65 var(--font-body);
-  color: var(--muted);
+  color: var(--slate);
   max-width: 64ch;
+}
+
+/* ---------- Drawn hairlines ----------
+   The rules that separate the principles, the steps and the capabilities are
+   pseudo-elements rather than borders so they can sweep in from the left as
+   each row is revealed. The list assembles itself as you scroll instead of
+   arriving whole. */
+
+.drawnRule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hairline-strong);
+  transform-origin: left;
+  transition: transform 0.85s var(--ease), background-color 0.3s ease;
+}
+
+:global(html.js) [data-reveal]:not([data-revealed]) > .drawnRule {
+  transform: scaleX(0);
+}
+
+/* The number follows the rule in rather than arriving with it, which is what
+   makes the row read as being drawn rather than simply faded up. */
+.principleNum,
+.stepNum {
+  transition: opacity 0.6s var(--ease) 0.3s, transform 0.6s var(--ease) 0.3s;
+}
+
+:global(html.js) [data-reveal]:not([data-revealed]) > .principleNum,
+:global(html.js) [data-reveal]:not([data-revealed]) > .stepNum {
+  opacity: 0;
+  transform: translateX(-10px);
 }
 
 @media (max-width: 700px) {
@@ -358,5 +493,27 @@
 
   .capabilityGrid {
     gap: 28px;
+  }
+}
+
+/* ---------- Reduced motion ----------
+   RevealObserver does not run at all under reduced motion, so nothing ever
+   gains [data-revealed] and every collapsed state above would stick. Release
+   all of them here. The global reduced-motion block already flattens the
+   durations; this makes sure there is something to see when it does. */
+@media (prefers-reduced-motion: reduce) {
+  :global(html.js) .photo[data-warm]:not([data-warmed]) {
+    filter: none;
+  }
+
+  :global(html.js) .h2[data-reveal]:not([data-revealed])::after,
+  :global(html.js) [data-reveal]:not([data-revealed]) > .drawnRule {
+    transform: none;
+  }
+
+  :global(html.js) [data-reveal]:not([data-revealed]) > .principleNum,
+  :global(html.js) [data-reveal]:not([data-revealed]) > .stepNum {
+    opacity: 1;
+    transform: none;
   }
 }

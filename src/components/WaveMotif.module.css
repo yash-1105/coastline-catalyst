@@ -1,0 +1,46 @@
+/* The two lines drift in opposite directions at speeds that do not divide into
+   each other, so the pattern they make together never lines up the same way
+   twice and the band reads as moving water rather than a looping GIF.
+
+   Each path is drawn one full wave period (300 user units) wider than the
+   viewBox, which is exactly how far it travels, so at the end of the cycle the
+   visible stretch is phase-identical to the start and the loop has no seam. */
+
+.waveA {
+  animation: ccWaveDriftLeft 23s linear infinite;
+  will-change: transform;
+}
+
+.waveB {
+  animation: ccWaveDriftRight 31s linear infinite;
+  will-change: transform;
+}
+
+@keyframes ccWaveDriftLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-300px);
+  }
+}
+
+@keyframes ccWaveDriftRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(300px);
+  }
+}
+
+/* The global reduced-motion rule crushes every animation to 0.01ms rather than
+   removing it, which would fling these to the end of their cycle. Stop them
+   outright instead: a still wave is the correct reduced-motion state. */
+@media (prefers-reduced-motion: reduce) {
+  .waveA,
+  .waveB {
+    animation: none;
+    will-change: auto;
+  }
+}
