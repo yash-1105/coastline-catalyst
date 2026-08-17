@@ -218,6 +218,15 @@
   }
 }
 
+/* Photo and name, grouped so the phone can stand them side by side. It repeats
+   the card's own column gap, so at width the card stacks exactly as it did
+   before the group existed. */
+.partnerHead {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 /* Only photographs on this site: square, radius 8, grayscale to colour.
    The warm-up is driven by the scroll reveal rather than by :hover, which
    does not exist on a touch screen: on a phone the old rule meant the photo
@@ -433,7 +442,7 @@
   font-feature-settings: 'tnum';
 }
 
-.step > div {
+.stepGroup {
   flex: 1 1 420px;
 }
 
@@ -484,15 +493,274 @@
   transform: translateX(-10px);
 }
 
+/* ---------- Phone ----------
+   Stacked in full, the seven sections are several screens of label, heading,
+   rule and prose in which nothing is louder than anything else. Below the
+   breakpoint the frame tightens, the two dense lists and the long prose fold
+   their supporting copy behind the row it belongs to, and the capabilities
+   turn sideways, so the page has a shape rather than one continuous column.
+
+   Everything folded is a real <details>, built by Narrow.tsx at this same
+   width. The disclosure rules below therefore only ever match on a phone,
+   which is why none of them need undoing above the breakpoint. With JS off
+   the wrappers stay plain divs: the page reads long again, but whole, and
+   every tightening here still applies.
+------------------------------------------------------------------ */
 @media (max-width: 700px) {
-  .section,
-  .partnersSection {
-    padding-top: 56px;
-    padding-bottom: 56px;
+  /* ---- Frame ---- */
+
+  .hero {
+    padding-top: 48px;
+    padding-bottom: 32px;
   }
 
+  .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .horizon {
+    margin-top: 24px;
+  }
+
+  .section,
+  .partnersSection {
+    padding-top: 34px;
+    padding-bottom: 34px;
+  }
+
+  .label {
+    margin-bottom: 12px;
+  }
+
+  /* 44px of empty space under a heading is more than a tenth of the screen. */
+  .h2 {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+  }
+
+  /* The lede hangs off the heading's margin, so it tightens with it. */
+  .sectionLede {
+    margin: -6px 0 20px;
+    font-size: 15.5px;
+  }
+
+  /* ---- What we believe ---- */
+
+  /* minmax(300px) is wider than the 272px content box at 320px wide, which
+     pushed the whole page sideways. One column, and the overflow goes too. */
+  .twoCol {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .ideaTitle {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  /* The ideas carry the most prose on the page, so they take the largest
+     share of the tightening. 16px still clears the 15px floor. */
+  .lede {
+    font-size: 16px;
+  }
+
+  /* ---- Investment philosophy and How we work ----
+     Number and title share a line and the body folds under them, so four
+     principles and five steps read as lists rather than as nine short essays. */
+
+  .principle,
+  .step {
+    flex-wrap: nowrap;
+    gap: 0 14px;
+    padding: 12px 0;
+  }
+
+  .principleNum,
+  .stepNum {
+    flex: 0 0 auto;
+  }
+
+  .principleBody,
+  .stepGroup {
+    flex: 1 1 auto;
+    /* Without this the 420px basis wins and the row runs off its own edge. */
+    min-width: 0;
+  }
+
+  /* The row's padding already sets the title under the rule, so the target is
+     grown to the full row by padding that a matching negative margin takes
+     back. Tapping anywhere on the row opens it. */
+  .principleBody > .disclosureSummary,
+  .stepGroup > .disclosureSummary {
+    padding: 12px 0;
+    margin: -12px 0;
+  }
+
+  /* ---- Beyond capital ----
+     Six peers, side by side: a phone reads them as a set this way, and the
+     section stops being one more column of stacked prose. Full bleed, so the
+     track runs off both edges rather than stopping inside the gutter. The
+     negative margin is exactly the section's padding and the track clips its
+     own overflow, so nothing can push the page sideways. */
+
   .capabilityGrid {
-    gap: 28px;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    /* Horizontal only: without this a sideways swipe drifts the page up. */
+    overflow-y: hidden;
+    /* Stops a swipe at either end chaining into the page scroll. */
+    overscroll-behavior-x: contain;
+    /* proximity, not mandatory, for the reason the home page track gives:
+       mandatory fights a short flick and yanks the track back. */
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scroll-padding-inline-start: var(--gutter);
+  }
+
+  .capability {
+    /* Narrower than the screen, so the next card always sits half in view.
+       That peek is the only thing telling a thumb there is more to the right. */
+    flex: 0 0 min(272px, 74vw);
+    scroll-snap-align: start;
+  }
+
+  /* Drawn rather than left to the native scrollbar, which iOS hides on touch,
+     which is exactly where the affordance is wanted. Narrow.tsx renders it
+     only once the track actually overflows. */
+  .railBar {
+    position: relative;
+    height: 2px;
+    margin-top: 22px;
+    background: var(--hairline);
+  }
+
+  .railBarFill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 2px;
+    width: 0;
+    background: var(--navy);
+  }
+
+  /* ---- India x GCC ----
+     The band keeps its whole argument: it is two short paragraphs and the
+     firm's entire thesis, so it is the one place worth the screen. */
+
+  .corridorInner {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  .corridorEyebrow {
+    margin-bottom: 16px;
+  }
+
+  .corridorHeading {
+    margin-bottom: 20px;
+  }
+
+  .corridorBody {
+    gap: 12px;
+  }
+
+  .corridorBody p {
+    font-size: 16px;
+  }
+
+  /* ---- Partners ---- */
+
+  .partnerGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .partnerCard {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  /* Face beside the name rather than above it: a 220px square is a third of
+     the screen before a word has been read. */
+  .partnerHead {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .photo {
+    width: 88px;
+    flex: 0 0 88px;
+  }
+
+  .partnerName {
+    font-size: 19px;
+  }
+
+  /* The first sentence carries the card, so it stays in view and takes the
+     line to itself, with the affordance under it. No top padding: the card's
+     own gap already sets it away from the name. This is the one summary that
+     wraps, because it is the one holding a paragraph rather than a title. */
+  .partnerBioWrap > .disclosureSummary {
+    flex-wrap: wrap;
+    padding-top: 0;
+  }
+
+  .disclosureSummary > .partnerBio {
+    flex: 1 1 100%;
+  }
+
+  /* ---- Disclosures ----
+     Only ever present below this breakpoint: above it Narrow.tsx renders a
+     plain wrapper with no summary at all. */
+
+  /* nowrap, so a title that runs to two lines wraps inside itself and leaves
+     the chevron alongside it rather than pushing it onto a line of its own. */
+  .disclosureSummary {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 12px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .disclosureSummary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The title is the whole row here, so the gap it holds open above the body
+     at width is not wanted. */
+  .disclosureSummary h3 {
+    margin-bottom: 0;
+  }
+
+  .disclosureHint {
+    font: 500 13px/1.6 var(--font-body);
+    color: var(--navy);
+  }
+
+  .disclosureChevron {
+    flex: 0 0 auto;
+    margin-left: auto;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--navy);
+    border-bottom: 1.5px solid var(--navy);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.3s var(--ease);
+  }
+
+  [open] > .disclosureSummary > .disclosureChevron {
+    transform: rotate(-135deg) translateY(-2px);
+  }
+
+  .disclosureBody {
+    padding-top: 12px;
   }
 }
 

@@ -13,6 +13,7 @@ import {
   principles,
   site,
 } from '@/lib/site';
+import { Disclosure, Rail } from './Narrow';
 import styles from './about.module.css';
 
 export const metadata: Metadata = {
@@ -35,6 +36,16 @@ const partnerLd = partners.map((partner) => ({
   worksFor: { '@type': 'Organization', name: site.name },
   ...(partner.linkedin.startsWith('http') ? { sameAs: [partner.linkedin] } : {}),
 }));
+
+/**
+ * First sentence, then the rest. The phone shows the first and folds the rest
+ * away; site.ts stays a copy file, so the split happens here. Returns null for
+ * a bio that is a single sentence, which is not worth a disclosure.
+ */
+function splitBio(bio: string): [string, string] | null {
+  const end = bio.indexOf('. ');
+  return end < 0 ? null : [bio.slice(0, end + 1), bio.slice(end + 2)];
+}
 
 export default function AboutPage() {
   return (
@@ -64,16 +75,24 @@ export default function AboutPage() {
             We are building this on two simple ideas
           </h2>
           <div className={styles.twoCol}>
-            {foundingIdeas.map((idea, i) => (
-              <div key={idea.title} data-reveal={i * 80}>
-                <h3 className={styles.ideaTitle}>{idea.title}</h3>
-                {idea.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 32)} className={styles.lede}>
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            ))}
+            {foundingIdeas.map((idea, i) => {
+              const [lead, ...rest] = idea.paragraphs;
+              return (
+                <div key={idea.title} data-reveal={i * 80}>
+                  <h3 className={styles.ideaTitle}>{idea.title}</h3>
+                  <p className={styles.lede}>{lead}</p>
+                  {rest.length > 0 ? (
+                    <Disclosure hint="Read more">
+                      {rest.map((paragraph) => (
+                        <p key={paragraph.slice(0, 32)} className={styles.lede}>
+                          {paragraph}
+                        </p>
+                      ))}
+                    </Disclosure>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -91,10 +110,12 @@ export default function AboutPage() {
               <div key={principle.num} className={styles.principle} data-reveal="60">
                 <span className={styles.drawnRule} data-rule aria-hidden="true" />
                 <span className={styles.principleNum} data-num>{principle.num}</span>
-                <div className={styles.principleBody}>
-                  <h3 className={styles.principleTitle}>{principle.title}</h3>
+                <Disclosure
+                  className={styles.principleBody}
+                  summary={<h3 className={styles.principleTitle}>{principle.title}</h3>}
+                >
                   <p className={styles.principleText}>{principle.body}</p>
-                </div>
+                </Disclosure>
               </div>
             ))}
           </div>
@@ -112,7 +133,7 @@ export default function AboutPage() {
           <p className={styles.sectionLede} data-reveal="60">
             {beyondCapital.body}
           </p>
-          <div className={styles.capabilityGrid}>
+          <Rail className={styles.capabilityGrid} label={beyondCapital.eyebrow}>
             {capabilities.map((item, i) => (
               <div key={item.title} className={styles.capability} data-reveal={i * 60}>
                 <span className={styles.drawnRule} data-rule aria-hidden="true" />
@@ -120,7 +141,7 @@ export default function AboutPage() {
                 <p className={styles.capabilityBody}>{item.body}</p>
               </div>
             ))}
-          </div>
+          </Rail>
         </div>
       </section>
 
@@ -157,10 +178,12 @@ export default function AboutPage() {
               <li key={step.title} className={styles.step} data-reveal={i * 70}>
                 <span className={styles.drawnRule} data-rule aria-hidden="true" />
                 <span className={styles.stepNum} data-num>{`0${i + 1}`}</span>
-                <div>
-                  <h3 className={styles.stepTitle}>{step.title}</h3>
+                <Disclosure
+                  className={styles.stepGroup}
+                  summary={<h3 className={styles.stepTitle}>{step.title}</h3>}
+                >
                   <p className={styles.stepBody}>{step.body}</p>
-                </div>
+                </Disclosure>
               </li>
             ))}
           </ol>
@@ -176,41 +199,62 @@ export default function AboutPage() {
             Two people, one long view
           </h2>
           <div className={styles.partnerGrid}>
-            {partners.map((partner, i) => (
-              <div key={partner.name} className={styles.partnerCard} data-reveal={i * 80}>
-                {partner.photo ? (
-                  <div className={styles.photo} data-warm>
-                    <Image
-                      src={partner.photo}
-                      alt={`${partner.name}, ${partner.role} at ${site.name}`}
-                      fill
-                      sizes="220px"
-                    />
+            {partners.map((partner, i) => {
+              const bio = splitBio(partner.bio);
+              return (
+                <div key={partner.name} className={styles.partnerCard} data-reveal={i * 80}>
+                  {/* Photo and name are one group so the phone can stand them side
+                      by side. The group repeats the card's own column gap, which
+                      is what leaves the desktop card exactly as it was. */}
+                  <div className={styles.partnerHead}>
+                    {partner.photo ? (
+                      <div className={styles.photo} data-warm>
+                        <Image
+                          src={partner.photo}
+                          alt={`${partner.name}, ${partner.role} at ${site.name}`}
+                          fill
+                          sizes="220px"
+                        />
+                      </div>
+                    ) : (
+                      /* Real headshots drop into `photo` in src/lib/site.ts. */
+                      <div className={styles.photoSlot} aria-hidden="true">
+                        <span className={styles.photoSlotInitials}>
+                          {initialsOf(partner.name)}
+                        </span>
+                        <span className={styles.photoSlotNote}>[Headshot to be added]</span>
+                      </div>
+                    )}
+                    <div>
+                      <h3 className={styles.partnerName}>{partner.name}</h3>
+                      <p className={styles.partnerRole}>{partner.role}</p>
+                    </div>
                   </div>
-                ) : (
-                  /* Real headshots drop into `photo` in src/lib/site.ts. */
-                  <div className={styles.photoSlot} aria-hidden="true">
-                    <span className={styles.photoSlotInitials}>{initialsOf(partner.name)}</span>
-                    <span className={styles.photoSlotNote}>[Headshot to be added]</span>
-                  </div>
-                )}
-                <div>
-                  <h3 className={styles.partnerName}>{partner.name}</h3>
-                  <p className={styles.partnerRole}>{partner.role}</p>
+                  {bio ? (
+                    <Disclosure
+                      className={styles.partnerBioWrap}
+                      summary={<span className={styles.partnerBio}>{bio[0]}</span>}
+                      hint="Read more"
+                      wide={<p className={styles.partnerBio}>{partner.bio}</p>}
+                    >
+                      <p className={styles.partnerBio}>{bio[1]}</p>
+                    </Disclosure>
+                  ) : (
+                    <p className={styles.partnerBio}>{partner.bio}</p>
+                  )}
+                  <a
+                    href={partner.linkedin}
+                    className={styles.partnerLink}
+                    aria-label={`${partner.name} on LinkedIn`}
+                    target={partner.linkedin.startsWith('http') ? '_blank' : undefined}
+                    rel={partner.linkedin.startsWith('http') ? 'noreferrer' : undefined}
+                  >
+                    <LinkedInIcon />
+                    LinkedIn
+                  </a>
                 </div>
-                <p className={styles.partnerBio}>{partner.bio}</p>
-                <a
-                  href={partner.linkedin}
-                  className={styles.partnerLink}
-                  aria-label={`${partner.name} on LinkedIn`}
-                  target={partner.linkedin.startsWith('http') ? '_blank' : undefined}
-                  rel={partner.linkedin.startsWith('http') ? 'noreferrer' : undefined}
-                >
-                  <LinkedInIcon />
-                  LinkedIn
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
